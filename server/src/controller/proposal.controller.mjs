@@ -19,16 +19,16 @@ class ProposalController {
     return this.dao.insertProposal(user, proposal);
   }
 
+  async editProposal(user, proposal) {
+    return this.dao.editProposal(user, proposal);
+  }
+
   async removeProposal(proposal) {
     return this.dao.removeProposal(proposal);
   }
 
   async removeAllProposals() {
     return this.dao.removeAllProposals();
-  }
-
-  async increaseScore(user, proposal, rating) {
-    return this.dao.increaseScore(user, proposal, rating);
   }
 }
 

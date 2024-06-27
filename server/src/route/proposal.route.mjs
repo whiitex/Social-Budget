@@ -53,6 +53,22 @@ class ProposalRoutes {
     });
 
     /**
+     * Edit a proposal
+     * It requires the user to be logged in.
+     * The proposal is sent in the request body.
+     *  - id: number
+     *  - description: string,
+     *  - cost: number
+     *  - is_approved: boolean
+     */
+    this.router.put("/", this.authenticator.isLoggedIn, (req, res, next) => {
+      this.proposalController
+        .editProposal(req.user, req.body)
+        .then((proposal) => res.status(200).json(proposal))
+        .catch((err) => next(err));
+    });
+
+    /**
      * Remove a proposal
      * It requires the user to be logged in.
      * The proposal is sent in the request body.
@@ -60,7 +76,6 @@ class ProposalRoutes {
      *   - author: string
      *   - description: string
      *   - cost: number
-     *   - score: number
      *   - is_approved: boolean
      */
     this.router.delete("/", this.authenticator.isLoggedIn, (req, res, next) => {
@@ -89,7 +104,6 @@ class ProposalRoutes {
      *   - author: string
      *   - description: string
      *   - cost: number
-     *   - score: number
      *   - is_approved: boolean
      */
     this.router.put(

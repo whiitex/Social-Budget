@@ -61,6 +61,35 @@ class ProposalDAO {
   }
 
   /**
+   * Edits a proposal in the proposals table.
+   * @param user - The user who is editing the proposal.
+   * @param proposal - The proposal to be edited.
+   */
+  async editProposal(user, proposal) {
+    return new Promise((resolve, reject) => {
+      // check if the user is the author of the proposal
+      const sqlCheck = `SELECT * FROM proposals WHERE id = ?`;
+      db.get(sqlCheck, [proposal.id], (err, row) => {
+        if (err) reject(err);
+        else if (!row) reject(new Error("Proposal not found"));
+        else if (user.username !== row.author)
+          reject(new Error("User cannot edit another user's proposal"));
+        else {
+          const sql = `UPDATE proposals SET description = ?, cost = ? WHERE id = ?`;
+          db.run(
+            sql,
+            [proposal.description, proposal.cost, proposal.id],
+            (err) => {
+              if (err) reject(err);
+              else resolve(true);
+            }
+          );
+        }
+      });
+    });
+  }
+
+  /**
    * Removes a proposal from the proposals table.
    * @param proposal
    * @returns true if no error occurs
@@ -87,44 +116,6 @@ class ProposalDAO {
         if (err) reject(err);
         else resolve(true);
       });
-    });
-  }
-
-  /**
-   * Increases the score of a proposal.
-   * @param proposal
-   * @param rating range [1,3]
-   * @returns
-   */
-  async insertScore(user, proposal, rating) {
-    return new Promise((resolve, reject) => {
-      // checks if the user is the same of the proposal author
-      if (user.username === proposal.author)
-        reject(new Error("User cannot vote for his own proposal"));
-      // user is not the author of the proposal
-      else {
-        // checks if the user has already voted for the proposal
-        const sqlCheck = `SELECT * FROM votes WHERE proposal_id = ? AND voter = ?`;
-        db.get(sqlCheck, [proposal.id, user.username], (err, row) => {
-          if (err) reject(err);
-          // update the vote of the user
-          else if (row) {
-            const sql = `UPDATE votes SET rating = ? WHERE proposal_id = ? AND voter = ?`;
-            db.run(sql, [rating, proposal.id, user.username], (err) => {
-              if (err) reject(err);
-              else resolve(true);
-            });
-          }
-          // insert a new vote
-          else {
-            const sql = `INSERT INTO votes (proposal_id, voter, rating) VALUES (?, ?, ?)`;
-            db.run(sql, [proposal.id, user.username, rating], (err) => {
-              if (err) reject(err);
-              else resolve(true);
-            });
-          }
-        });
-      }
     });
   }
 }
