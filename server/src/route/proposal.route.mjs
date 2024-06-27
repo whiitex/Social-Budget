@@ -97,7 +97,7 @@ class ProposalRoutes {
       this.authenticator.isLoggedIn,
       (req, res, next) => {
         this.proposalController
-          .increaseScore(req.body, req.query.rating)
+          .increaseScore(req.user, req.body, req.query.rating)
           .then((proposal) => res.status(200).json(proposal))
           .catch((err) => next(err));
       }

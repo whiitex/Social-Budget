@@ -27,8 +27,8 @@ class ProposalController {
     return this.dao.removeAllProposals();
   }
 
-  async increaseScore(proposal, rating) {
-    return this.dao.increaseScore(proposal, rating);
+  async increaseScore(user, proposal, rating) {
+    return this.dao.increaseScore(user, proposal, rating);
   }
 }
 
