@@ -1,11 +1,9 @@
 "use strict";
 
 import express from "express";
-import session from "express-session";
-import passport from "passport";
-import LocalStrategy from "passport-local";
 import morgan from "morgan";
-import UserDAO from "./dao/user.dao.mjs";
+import Authenticator from "./route/auth.routes.mjs";
+import ProposalRoutes from "./route/proposal.route.mjs";
 
 const prefix = "/socialbudget";
 
@@ -18,32 +16,11 @@ function initRoutes(app) {
   app.use(express.json({ limit: "25mb" }));
   app.use(express.urlencoded({ limit: "25mb", extended: true }));
 
+  const authRoutes = new Authenticator(app);
+  const proposalRoutes = new ProposalRoutes(authRoutes);
 
-
-
-  /**
-   * The authenticator object is used to authenticate users.
-   * It is used to protect the routes by requiring users to be logged in.
-   * It is also used to protect routes by requiring users to have the correct role.
-   * All routes must have the authenticator object in order to work properly.
-   */
-  // const authenticator = new Authenticator(app)
-  // const userRoutes = new UserRoutes(authenticator)
-  // const authRoutes = new AuthRoutes(authenticator)
-  // const productRoutes = new ProductRoutes(authenticator)
-  // const cartRoutes = new CartRoutes(authenticator)
-  // const reviewRoutes = new ReviewRoutes(authenticator)
-
-  /**
-   * The routes for the user, authentication, product, proposal, and cart resources are defined here.
-   */
-  // app.use(`${prefix}/users`, userRoutes.getRouter())
-  // app.use(`${prefix}/sessions`, authRoutes.getRouter())
-  // app.use(`${prefix}/products`, productRoutes.getRouter())
-  // app.use(`${prefix}/carts`, cartRoutes.getRouter())
-  // app.use(`${prefix}/reviews`, reviewRoutes.getRouter())
-
-  // ErrorHandler.registerErrorHandler(app)
+  app.use(`${prefix}/api/sessions`, authRoutes.getRouter());
+  app.use(`${prefix}/api/proposals`, proposalRoutes.getRouter());
 }
 
 export default initRoutes;

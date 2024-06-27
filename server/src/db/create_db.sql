@@ -13,9 +13,17 @@ CREATE TABLE IF NOT EXISTS proposals (
   author TEXT NOT NULL,
   description TEXT NOT NULL,
   cost DECIMAL NOT NULL,
-  score INTEGER DEFAULT 0,
   isapproved BOOLEAN DEFAULT FALSE,
   FOREIGN KEY (author) REFERENCES users(username)
+);
+
+CREATE TABLE IF NOT EXISTS votes (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  proposal_id INTEGER NOT NULL,
+  voter TEXT NOT NULL,
+  score INTEGER NOT NULL,
+  FOREIGN KEY (proposal_id) REFERENCES proposals(id),
+  FOREIGN KEY (voter) REFERENCES users(username)
 );
 
 CREATE TABLE IF NOT EXISTS state (

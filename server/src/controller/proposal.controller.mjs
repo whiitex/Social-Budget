@@ -1,6 +1,6 @@
 "use strict";
 
-import ProposalDAO from "./src/dao/proposal.dao.mjs";
+import ProposalDAO from "../dao/proposal.dao.mjs";
 
 class ProposalController {
   constructor() {
@@ -15,8 +15,8 @@ class ProposalController {
     return this.dao.getProposals();
   }
 
-  async insertProposal(proposal) {
-    return this.dao.insertProposal(proposal);
+  async insertProposal(user, proposal) {
+    return this.dao.insertProposal(user, proposal);
   }
 
   async removeProposal(proposal) {

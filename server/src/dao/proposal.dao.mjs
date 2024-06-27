@@ -3,7 +3,6 @@
 import db from "../db/db.mjs";
 
 class ProposalDAO {
-
   /**
    * Callable by all users, anonymous or logged in.
    * @returns all approved proposals
@@ -34,32 +33,36 @@ class ProposalDAO {
 
   /**
    * Inserts a proposal into the proposals table.
-   * @param proposal 
-   * @returns 
+   * @param user - The user who is submitting the proposal.
+   * @param proposal - The proposal to be inserted.
+   * @returns
    */
-  async insertProposal(proposal) {
+  async insertProposal(user, proposal) {
     return new Promise((resolve, reject) => {
-      const sql = `INSERT INTO proposals (author, description, cost, score, is_approved)VALUES (?, ?, ?, ?, ?)`;
-      db.run(
-        sql,
-        [
-          proposal.author,
-          proposal.description,
-          proposal.cost,
-          proposal.score,
-          proposal.is_approved,
-        ],
-        (err) => {
-          if (err) reject(err);
-          else resolve(true);
-        }
-      );
+      // check if the user has already submitted 3 proposals
+      const sqlCheck = `SELECT * count FROM proposals WHERE author = ?`;
+      db.all(sqlCheck, [user.username], (err, rows) => {
+        if (err) reject(err);
+        // user can submit a proposal
+        else if (!rows || rows.length < 3) {
+          const sql = `INSERT INTO proposals (author, description, cost, is_approved)VALUES (?, ?, ?, ?)`;
+          db.run(
+            sql,
+            [user.username, proposal.description, proposal.cost, false],
+            (err) => {
+              if (err) reject(err);
+              else resolve(true);
+            }
+          );
+          // user has already submitted 3 proposals
+        } else reject(new Error("User has already submitted 3 proposals"));
+      });
     });
   }
 
   /**
    * Removes a proposal from the proposals table.
-   * @param proposal 
+   * @param proposal
    * @returns true if no error occurs
    */
   async removeProposal(proposal) {
@@ -74,7 +77,7 @@ class ProposalDAO {
 
   /**
    * Remove all proposals from the proposals table.
-   * @param proposal 
+   * @param proposal
    * @returns true if no error occurs
    */
   async removeAllProposals() {
@@ -89,17 +92,39 @@ class ProposalDAO {
 
   /**
    * Increases the score of a proposal.
-   * @param proposal 
+   * @param proposal
    * @param rating range [1,3]
-   * @returns 
+   * @returns
    */
-  async increaseScore(proposal, rating) {
+  async insertScore(user, proposal, rating) {
     return new Promise((resolve, reject) => {
-      const sql = `UPDATE proposals SET score = score + ? WHERE id = ?`;
-      db.run(sql, [rating, proposal.id], (err) => {
-        if (err) reject(err);
-        else resolve(true);
-      });
+      // checks if the user is the same of the proposal author
+      if (user.username === proposal.author)
+        reject(new Error("User cannot vote for his own proposal"));
+      // user is not the author of the proposal
+      else {
+        // checks if the user has already voted for the proposal
+        const sqlCheck = `SELECT * FROM votes WHERE proposal_id = ? AND voter = ?`;
+        db.get(sqlCheck, [proposal.id, user.username], (err, row) => {
+          if (err) reject(err);
+          // update the vote of the user
+          else if (row) {
+            const sql = `UPDATE votes SET rating = ? WHERE proposal_id = ? AND voter = ?`;
+            db.run(sql, [rating, proposal.id, user.username], (err) => {
+              if (err) reject(err);
+              else resolve(true);
+            });
+          }
+          // insert a new vote
+          else {
+            const sql = `INSERT INTO votes (proposal_id, voter, rating) VALUES (?, ?, ?)`;
+            db.run(sql, [proposal.id, user.username, rating], (err) => {
+              if (err) reject(err);
+              else resolve(true);
+            });
+          }
+        });
+      }
     });
   }
 }

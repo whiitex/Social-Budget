@@ -1,5 +1,6 @@
 "use strict";
 
+import express from "express";
 import session from "express-session";
 import passport from "passport";
 import LocalStrategy from "passport-local";
@@ -8,7 +9,7 @@ import UserDAO from "../dao/user.dao.mjs";
 class Authenticator {
   constructor(app) {
     this.app = app;
-    this.router = express.Router();
+    this.router = new express.Router();
     this.userDAO = new UserDAO();
     this.initAuth();
   }

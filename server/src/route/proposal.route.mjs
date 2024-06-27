@@ -1,59 +1,108 @@
-import express, { Router } from "express"
-import { body, param } from "express-validator"
-// import CartController from "../controllers/cartController"
+"use strict";
 
+import express from "express";
+import ProposalController from "../controller/proposal.controller.mjs";
 
-/**
- * Represents a class that defines the routes for handling proposals
- */
-class CartRoutes {
-    private controller
-    private router
-    // private authenticator: Authenticator
+class ProposalRoutes {
+  constructor(authenticator) {
+    this.authenticator = authenticator;
+    this.router = new express.Router();
+    this.proposalController = new ProposalController();
+    this.initRoutes();
+  }
+
+  getRouter() {
+    return this.router;
+  }
+
+  initRoutes() {
+    /**
+     * Get all approved proposals
+     * It does NOT require the user to be logged in.
+     */
+    this.router.get("/approved", (req, res, next) => {
+      this.proposalController
+        .getApprovedProposals()
+        .then((proposals) => res.status(200).json(proposals))
+        .catch((err) => next(err));
+    });
 
     /**
-     * Constructs a new instance of the CartRoutes class.
-     * @param {Authenticator} authenticator - The authenticator object used for authentication.
+     * Get all proposals
+     * It requires the user to be logged in.
      */
-    constructor(authenticator) {
-        this.authenticator = authenticator
-        this.controller = new CartController()
-        this.router = express.Router()
-        this.errorHandler = new ErrorHandler()
-        this.initRoutes();
-    }
+    this.router.get("/", this.authenticator.isLoggedIn, (req, res, next) => {
+      this.proposalController
+        .getProposals()
+        .then((proposals) => res.status(200).json(proposals))
+        .catch((err) => next(err));
+    });
 
     /**
-     * Returns the router instance.
-     * @returns The router instance.
+     * Insert a proposal
+     * It requires the user to be logged in.
+     * The proposal is sent in the request body.
+     *  - description: string,
+     *  - cost: number
      */
-    getRouter() {
-        return this.router;
-    }
+    this.router.post("/", this.authenticator.isLoggedIn, (req, res, next) => {
+      this.proposalController
+        .insertProposal(req.user, req.body)
+        .then((proposal) => res.status(200).json(proposal))
+        .catch((err) => next(err));
+    });
 
     /**
-     * Initializes the routes for the cart router.
-     * 
-     * @remarks
-     * This method sets up the HTTP routes for creating, retrieving, updating, and deleting cart data.
-     * It can (and should!) apply authentication, authorization, and validation middlewares to protect the routes.
+     * Remove a proposal
+     * It requires the user to be logged in.
+     * The proposal is sent in the request body.
+     *   - id: number
+     *   - author: string
+     *   - description: string
+     *   - cost: number
+     *   - score: number
+     *   - is_approved: boolean
      */
-    initRoutes() {
+    this.router.delete("/", this.authenticator.isLoggedIn, (req, res, next) => {
+      this.proposalController
+        .removeProposal(req.body)
+        .then((proposal) => res.status(200).json(proposal))
+        .catch((err) => next(err));
+    });
 
-        /**
-         * Route for getting the cart of the logged in customer.
-         * It requires the user to be logged in and to be a customer.
-         * It returns the cart of the logged in customer.
-         */
-        this.router.get(
-            "/",
-            [
-                this.authenticator.isLoggedIn,
-                this.authenticator.isCustomer
-            ],
-            (req: any, res: any, next: any) => this.controller.getCart(req.user)
-                .then((cart: Cart) => res.status(200).json(cart))
-                .catch((err) => next(err))
-        )
-    }
+    /**
+     * Remove all proposals
+     * It requires the user to be logged in and to be admin.
+     */
+    this.router.delete("/all", this.authenticator.isAdmin, (req, res, next) => {
+      this.proposalController
+        .removeAllProposals()
+        .then((ok) => res.status(200).json(ok))
+        .catch((err) => next(err));
+    });
+
+    /**
+     * Increase the score of a proposal
+     * It requires the user to be logged in.
+     * The proposal is sent in the request body.
+     *   - id: number
+     *   - author: string
+     *   - description: string
+     *   - cost: number
+     *   - score: number
+     *   - is_approved: boolean
+     */
+    this.router.put(
+      "/score",
+      this.authenticator.isLoggedIn,
+      (req, res, next) => {
+        this.proposalController
+          .increaseScore(req.body, req.query.rating)
+          .then((proposal) => res.status(200).json(proposal))
+          .catch((err) => next(err));
+      }
+    );
+  }
 }
+
+export default ProposalRoutes;
