@@ -1,6 +1,8 @@
 CREATE TABLE IF NOT EXISTS users (
   username TEXT PRIMARY KEY,
   email TEXT NOT NULL,
+  name TEXT NOT NULL,
+  surname TEXT NOT NULL,
   password TEXT NOT NULL,
   salt TEXT NOT NULL,
   isadmin BOOLEAN NOT NULL

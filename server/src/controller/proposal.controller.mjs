@@ -3,7 +3,6 @@
 import ProposalDAO from "./src/dao/proposal.dao.mjs";
 
 class ProposalController {
-  
   constructor() {
     this.dao = new ProposalDAO();
   }

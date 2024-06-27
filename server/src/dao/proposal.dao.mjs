@@ -1,6 +1,6 @@
 "use strict";
 
-import db from "./src/db/db.js";
+import db from "../db/db.mjs";
 
 class ProposalDAO {
 

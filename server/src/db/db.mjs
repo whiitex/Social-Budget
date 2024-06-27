@@ -4,7 +4,7 @@ import sqlite3 from "sqlite3";
 
 const sqlite = sqlite3.verbose();
 
-const db = new sqlite.Database(".src/db/db.db", (err) => {
+const db = new sqlite.Database("db.db", (err) => {
   if (err) throw err;
 });
 

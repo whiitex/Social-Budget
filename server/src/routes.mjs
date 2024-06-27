@@ -1,7 +1,12 @@
-import express from "express"
+"use strict";
 
+import express from "express"
+import passport from "passport";
+import LocalStrategy from "passport-local";
+import UserDAO from "./dao/user.dao.mjs";
 import morgan from "morgan";
-const prefix = "/socialbudget"
+
+const prefix = "/socialbudget";
 
 /**
  * Initializes the routes for the application.
@@ -11,6 +16,12 @@ function initRoutes(app) {
     app.use(morgan("dev")) // Log requests to the console
     app.use(express.json())
     app.use(express.urlencoded({ extended: true }))
+
+    const userDAO = new UserDAO();
+
+    passport.use(new LocalStrategy(async function verify(username, password, callaback) {
+        const user = await userDAO.getUserByCredentials
+    }))
 
     /**
      * The authenticator object is used to authenticate users.
@@ -28,11 +39,11 @@ function initRoutes(app) {
     /**
      * The routes for the user, authentication, product, proposal, and cart resources are defined here.
      */
-    app.use(`${prefix}/users`, userRoutes.getRouter())
-    app.use(`${prefix}/sessions`, authRoutes.getRouter())
-    app.use(`${prefix}/products`, productRoutes.getRouter())
-    app.use(`${prefix}/carts`, cartRoutes.getRouter())
-    app.use(`${prefix}/reviews`, reviewRoutes.getRouter())
+    // app.use(`${prefix}/users`, userRoutes.getRouter())
+    // app.use(`${prefix}/sessions`, authRoutes.getRouter())
+    // app.use(`${prefix}/products`, productRoutes.getRouter())
+    // app.use(`${prefix}/carts`, cartRoutes.getRouter())
+    // app.use(`${prefix}/reviews`, reviewRoutes.getRouter())
 
     // ErrorHandler.registerErrorHandler(app)
 }

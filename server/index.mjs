@@ -1,9 +1,8 @@
 "use strict";
 
-// imports
 import express from "express";
 import cors from "cors";
-import initRoutes from "./src/routes";
+import initRoutes from "./src/routes.mjs";
 
 // init express
 const app = express();
