@@ -4,9 +4,8 @@ import Proposal1 from "../Proposal/Proposal1";
 import DigitalButtons from "../Utility/DigitalButtons";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
-
 const Phase1 = () => {
-  const [proposals, setProposals] = useState([1,2,3]);
+  const [proposals, setProposals] = useState([1, 2, 3]);
 
   return (
     <div id="proposals" className="row mb-5">
@@ -44,7 +43,7 @@ const Phase1 = () => {
                       placeholder="Enter value"
                     />
                   </div>
-                  <DigitalButtons margintop="mt-4"/>
+                  <DigitalButtons margintop="mt-4" />
                 </div>
               </Form.Group>
               <button type="submit" className="btn btn-primary">

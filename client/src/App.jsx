@@ -6,6 +6,7 @@ import Phase0 from "./components/Phase/Phase0";
 import Phase1 from "./components/Phase/Phase1";
 import "./App.css";
 import Phase2 from "./components/Phase/Phase2";
+import Phase3 from "./components/Phase/Phase3";
 
 function App() {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -13,7 +14,7 @@ function App() {
   const [shouldRefresh, setShouldRefresh] = useState(false);
 
   // state PHASE definition
-  const [phase, setPhase] = useState(2);
+  const [phase, setPhase] = useState(3);
   const phaseName = [
     "Phase 0 - Budget definition",
     "Phase 1 - Proposal insertion",
@@ -37,9 +38,9 @@ function App() {
         ) : phase === 1 ? (
           <Phase1 />
         ) : phase === 2 ? (
-          <Phase2 proposals={[]}/>
+          <Phase2 proposals={[1,2]}/>
         ) : phase === 3 ? (
-          <></>
+          <Phase3 proposals={[]} budget={500}/>
         ) : (
           <div className="text-center">
             <h2>Please wait...</h2>
