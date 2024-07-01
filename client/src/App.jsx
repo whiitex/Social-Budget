@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { Container } from "react-bootstrap";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
-import "./App.css";
 import Phase0 from "./components/Phase/Phase0";
 import Phase1 from "./components/Phase/Phase1";
+import "./App.css";
+import Phase2 from "./components/Phase/Phase2";
 
 function App() {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -12,7 +13,7 @@ function App() {
   const [shouldRefresh, setShouldRefresh] = useState(false);
 
   // state PHASE definition
-  const [phase, setPhase] = useState(1);
+  const [phase, setPhase] = useState(2);
   const phaseName = [
     "Phase 0 - Budget definition",
     "Phase 1 - Proposal insertion",
@@ -36,7 +37,7 @@ function App() {
         ) : phase === 1 ? (
           <Phase1 />
         ) : phase === 2 ? (
-          <></>
+          <Phase2 proposals={[]}/>
         ) : phase === 3 ? (
           <></>
         ) : (
