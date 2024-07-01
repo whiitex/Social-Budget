@@ -4,6 +4,7 @@ import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import "./App.css";
 import Phase0 from "./components/Phase/Phase0";
+import Phase1 from "./components/Phase/Phase1";
 
 function App() {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -11,7 +12,7 @@ function App() {
   const [shouldRefresh, setShouldRefresh] = useState(false);
 
   // state PHASE definition
-  const [phase, setPhase] = useState(0);
+  const [phase, setPhase] = useState(1);
   const phaseName = [
     "Phase 0 - Budget definition",
     "Phase 1 - Proposal insertion",
@@ -33,7 +34,7 @@ function App() {
         {phase === 0 ? (
           <Phase0 />
         ) : phase === 1 ? (
-          <></>
+          <Phase1 />
         ) : phase === 2 ? (
           <></>
         ) : phase === 3 ? (

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Social Budget</title>
+    <title>Web Page with Bootstrap</title>
 
     <!-- Bootstrap CSS -->
     <link
@@ -21,18 +21,19 @@
   <body>
     <div id="wrapper">
       <!-- Navigation bar with Login Button -->
-      <nav
-        class="navbar navbar-expand-lg navbar-dark bg-dark text-white py-2 fixed-top d-flex justify-content-between"
-      >
-        <a class="navbar-brand ml-5 mr-0">Social Budget 2024</a>
-        <button type="button" id="adminButton">>> next phase <<</button>
-        <button class="btn btn-info mr-5" type="button" id="loginButton">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand ml-5">Social Budget 2024</a>
+        <button
+          class="btn btn-info ml-auto mr-5"
+          type="button"
+          id="loginButton"
+        >
           Login
         </button>
       </nav>
 
       <!-- Main Content -->
-      <div id="content" class="container pt-5 mt-5 mb-5">
+      <div id="content" class="container mt-5">
         <h1 class="text-center">Phase 1</h1>
 
         <div id="proposals" class="row mb-5">
@@ -85,11 +86,15 @@
             <div class="row justify-content-center">
               <div class="col-10 col-sm-10 col-md-9 col-lg-7">
                 <h3>Insert new proposal</h3>
-                <form>
+                <form class="form">
                   <div class="form-group">
                     <label class="mb-1" for="description">Description</label>
-                    <textarea class="form-control inputText id="description"
-                    rows="3" placeholder="Enter description">
+                    <textarea
+                      class="form-control inputText"
+                      id="description"
+                      rows="3"
+                      placeholder="Enter description"
+                    ></textarea>
                   </div>
                   <div class="form-group row">
                     <div class="col-8 d-flex align-items-center pl-0">
@@ -131,7 +136,7 @@
       </div>
 
       <!-- Footer -->
-      <footer class="text-center bg-dark text-white py-2">
+      <footer class="fixed-bottom text-center">
         <div class="container">
           <p class="my-0 mb-1">
             &copy; Social Budget 2024. All Rights Reserved.

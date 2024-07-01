@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Container, Form } from "react-bootstrap";
-import 'bootstrap-icons/font/bootstrap-icons.css';
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 const Phase0 = () => {
   return (
