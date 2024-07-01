@@ -1,5 +1,6 @@
 import React from "react";
 import { Button, Container, Form } from "react-bootstrap";
+import DigitalButtons from "../Utility/DigitalButtons";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
 const Phase0 = () => {
@@ -18,20 +19,7 @@ const Phase0 = () => {
                   className="inputText"
                   placeholder="Enter value"
                 />
-                <div className="d-flex flex-column ml-3 justify-content-center">
-                  <button type="button" className="plain-button p-1 m-0">
-                    <i
-                      className="btn-light bi bi-chevron-compact-up m-0 p-1"
-                      style={{ fontSize: "1.4em" }}
-                    />
-                  </button>
-                  <button type="button" className="plain-button p-1 m-0">
-                    <i
-                      className="btn-light bi bi-chevron-compact-down m-0 p-1"
-                      style={{ fontSize: "1.4em" }}
-                    ></i>
-                  </button>
-                </div>
+                <DigitalButtons margintop="mt-0" />
               </div>
             </Form.Group>
             <div className="pl-0 col-4">

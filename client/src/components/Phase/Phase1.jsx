@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Button, Container, Form } from "react-bootstrap";
+import { Container, Form } from "react-bootstrap";
 import Proposal1 from "../Proposal/Proposal1";
+import DigitalButtons from "../Utility/DigitalButtons";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
 
@@ -43,20 +44,7 @@ const Phase1 = () => {
                       placeholder="Enter value"
                     />
                   </div>
-                  <div className="d-flex flex-column ml-3 justify-content-center mt-4">
-                    <button type="button" className="plain-button p-1 m-0">
-                      <i
-                        className="btn-light bi bi-chevron-compact-up m-0 p-1"
-                        style={{ fontSize: "1.4em" }}
-                      ></i>
-                    </button>
-                    <button type="button" className="plain-button p-1 m-0">
-                      <i
-                        className="btn-light bi bi-chevron-compact-down m-0 p-1"
-                        style={{ fontSize: "1.4em" }}
-                      ></i>
-                    </button>
-                  </div>
+                  <DigitalButtons margintop="mt-4"/>
                 </div>
               </Form.Group>
               <button type="submit" className="btn btn-primary">
