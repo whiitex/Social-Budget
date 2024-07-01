@@ -9,7 +9,12 @@ const Phase2 = ({ proposals }) => {
       ) : (
         <div id="preference" className="row mb-5">
           {proposals.map((proposal, index) => (
-            <Proposal2 key={index} desciption="ciao" cost={111} votes={1} />
+            <Proposal2
+              key={index}
+              desciption={proposal.description}
+              cost={proposal.cost}
+              votes={proposal.score}
+            />
           ))}
         </div>
       )}

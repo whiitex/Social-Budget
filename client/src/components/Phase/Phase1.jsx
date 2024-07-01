@@ -10,7 +10,11 @@ const Phase1 = () => {
   return (
     <div id="proposals" className="row mb-5">
       {proposals.map((proposal, index) => (
-        <Proposal1 key={index} cost={100} description={"sample description"} />
+        <Proposal1
+          key={index}
+          cost={proposal.cost}
+          description={proposal.description}
+        />
       ))}
 
       {/* Form for inserting a new proposal */}
