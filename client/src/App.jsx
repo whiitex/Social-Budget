@@ -26,10 +26,10 @@ function App() {
     await AuthAPI.logout();
     setUser(null);
     setIsAdmin(false);
-  }
+  };
 
   // state PHASE
-  const [phase, setPhase] = useState(2);
+  const [phase, setPhase] = useState(0);
   const phaseName = [
     "Phase 0 - Budget definition",
     "Phase 1 - Proposal insertion",
@@ -43,22 +43,27 @@ function App() {
 
   const [proposals, setProposals] = useState([]);
 
-
   useEffect(() => {
     AuthAPI.getUserInfo()
-    .then(user => {
-      setUser(user);
-      setIsAdmin(user.isadmin);
-    })
-    .catch((err) => {
-      setUser(null);
-      setIsAdmin(false);
-    });
+      .then((user) => {
+        setUser(user);
+        setIsAdmin(user.isadmin);
+        console.log(user);
+      })
+      .catch((err) => {
+        setUser(null);
+        setIsAdmin(false);
+      });
   }, []);
 
   return (
     <>
-      <Header isAdmin={isAdmin} user={user} handleLogin={handleLogin} handleLogout={handleLogout}/>
+      <Header
+        isAdmin={isAdmin}
+        user={user}
+        handleLogin={handleLogin}
+        handleLogout={handleLogout}
+      />
 
       <Container id="content" className="pt-5 mt-5 mb-5">
         <h1 className="text-center">{phaseName[phase]}</h1>

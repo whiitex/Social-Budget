@@ -37,6 +37,7 @@ class UserDAO {
             username: row.username,
             name: row.name,
             surname: row.surname,
+            isadmin: row.isadmin,
           };
 
           crypto.scrypt(password, row.salt, 64, function (err, hashedPassword) {
