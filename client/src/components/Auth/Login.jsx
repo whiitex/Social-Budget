@@ -1,17 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 import { Modal, Form, Button } from "react-bootstrap";
 
-const Login = ({show, setShow, login, logout}) => {
+const Login = ({ show, setShow, handleLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessages, setErrorMessages] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const credentials = { username, password };
+    e.target.reset();
+    setUsername("");
+    setPassword("");
 
-    const credentials = {username, password};
-    
-  }
+    handleLogin(credentials)
+      .then(() => {
+        setErrorMessage("");
+        setShow(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err.message === "Unauthorized")
+          setErrorMessage("Invalid username and/or password");
+        else setErrorMessage(err.message);
+        setShow(true);
+      });
+  };
 
   return (
     // Login Modal
@@ -41,7 +55,7 @@ const Login = ({show, setShow, login, logout}) => {
             </button>
           </Modal.Header>
           <div className="modal-body">
-            <form>
+            <Form onSubmit={handleSubmit}>
               <Form.Group className="mb-3">
                 <label htmlFor="username">Username</label>
                 <input
@@ -49,6 +63,7 @@ const Login = ({show, setShow, login, logout}) => {
                   className="form-control"
                   id="username"
                   placeholder="Enter username"
+                  onChange={(e) => setUsername(e.target.value)}
                 />
               </Form.Group>
               <Form.Group className="mb-3">
@@ -58,12 +73,16 @@ const Login = ({show, setShow, login, logout}) => {
                   className="form-control"
                   id="password"
                   placeholder="Enter password"
+                  onChange={(e) => setPassword(e.target.value)}
                 />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <p style={{ color: "red" }}>{errorMessage}</p>
               </Form.Group>
               <Button type="submit" className="btn-primary">
                 Sign in
               </Button>
-            </form>
+            </Form>
           </div>
         </Modal.Body>
       </Modal.Dialog>

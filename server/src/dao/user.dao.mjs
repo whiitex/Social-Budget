@@ -43,7 +43,7 @@ class UserDAO {
             if (err) reject(err);
             if (
               !crypto.timingSafeEqual(
-                Buffer.from(row.hash, "hex"),
+                Buffer.from(row.password, "hex"),
                 hashedPassword
               )
             )

@@ -19,10 +19,12 @@ class Authenticator {
   }
 
   initAuth() {
+    const copyThis = this;
+
     // Passport configuration
     passport.use(
       new LocalStrategy(async function verify(username, password, callaback) {
-        const user = await this.userDAO.getUserByCredentials(
+        const user = await copyThis.userDAO.getUserByCredentials(
           username,
           password
         );
@@ -37,7 +39,7 @@ class Authenticator {
     });
 
     passport.deserializeUser(function (user, done) {
-      return callaback(null, user);
+      return done(null, user);
     });
 
     // Session configuration
@@ -46,7 +48,11 @@ class Authenticator {
         secret: "warzoneisbetterthanfortnite",
         resave: false,
         saveUninitialized: false,
-        maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day
+        cookie: {
+          httpOnly: true,
+          maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day
+          sameSite: "Strict",
+        },
       })
     );
 
@@ -60,7 +66,7 @@ class Authenticator {
      * - username: string. It cannot be empty.
      * - password: string. It cannot be empty.
      */
-    this.router.post("/", (res, req, next) => {
+    this.router.post("/", (req, res, next) => {
       this.login(req, res, next)
         .then((user) => res.status(200).json(user))
         .catch((err) => res.status(401).json(err));

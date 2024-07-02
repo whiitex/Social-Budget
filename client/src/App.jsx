@@ -6,15 +6,30 @@ import Phase0 from "./components/Phase/Phase0";
 import Phase1 from "./components/Phase/Phase1";
 import Phase2 from "./components/Phase/Phase2";
 import Phase3 from "./components/Phase/Phase3";
+import AuthAPI from "./API/auth.mjs";
 import "./App.css";
 
 function App() {
-  const [isAdmin, setIsAdmin] = useState(true);
-  const [user, setUser] = useState(null);
   const [shouldRefresh, setShouldRefresh] = useState(false);
 
+  // state USER, ISADMIN
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [user, setUser] = useState(null);
+
+  const handleLogin = async (credentials) => {
+    const user = await AuthAPI.login(credentials);
+    setUser(user);
+    setIsAdmin(user.isadmin);
+  };
+
+  const handleLogout = async () => {
+    await AuthAPI.logout();
+    setUser(null);
+    setIsAdmin(false);
+  }
+
   // state PHASE
-  const [phase, setPhase] = useState(1);
+  const [phase, setPhase] = useState(2);
   const phaseName = [
     "Phase 0 - Budget definition",
     "Phase 1 - Proposal insertion",
@@ -28,9 +43,22 @@ function App() {
 
   const [proposals, setProposals] = useState([]);
 
+
+  useEffect(() => {
+    AuthAPI.getUserInfo()
+    .then(user => {
+      setUser(user);
+      setIsAdmin(user.isadmin);
+    })
+    .catch((err) => {
+      setUser(null);
+      setIsAdmin(false);
+    });
+  }, []);
+
   return (
     <>
-      <Header isAdmin={isAdmin} user={user} setUser={setUser} />
+      <Header isAdmin={isAdmin} user={user} handleLogin={handleLogin} handleLogout={handleLogout}/>
 
       <Container id="content" className="pt-5 mt-5 mb-5">
         <h1 className="text-center">{phaseName[phase]}</h1>

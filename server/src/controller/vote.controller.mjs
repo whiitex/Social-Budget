@@ -4,7 +4,7 @@ import VoteDAO from "../dao/vote.dao.mjs";
 
 class VoteController {
   constructor() {
-    this.dao = new VoteDAO();
+    this.dao = new VoteDAO;
   }
 
   async increaseScore(user, proposal, rating) {

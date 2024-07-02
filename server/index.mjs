@@ -8,7 +8,12 @@ import initRoutes from "./src/routes.mjs";
 const app = express();
 
 // CORS options
-app.use(cors());
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "http://localhost:3000"],
+    credentials: true,
+  })
+);
 
 initRoutes(app);
 

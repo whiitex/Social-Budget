@@ -2,7 +2,7 @@
 
 import db from "../db/db.mjs";
 
-class voteDAO {
+class VoteDAO {
   /**
    * Increases the score of a proposal.
    * @param proposal
@@ -56,4 +56,4 @@ class voteDAO {
   }
 }
 
-export default voteDAO;
+export default VoteDAO;

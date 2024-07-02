@@ -4,7 +4,7 @@ import ProposalDAO from "../dao/proposal.dao.mjs";
 
 class ProposalController {
   constructor() {
-    this.dao = new ProposalDAO();
+    this.dao = new ProposalDAO;
   }
 
   async getApprovedProposals() {
