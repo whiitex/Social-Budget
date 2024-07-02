@@ -76,7 +76,11 @@ body {
 }
 
 #loginButton {
-    margin-left: 9em;
+    margin-left: 20em;
+}
+
+#brandSocialBudget {
+    margin-right: 1em;
 }
 
 button[type="submit"] {

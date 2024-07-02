@@ -1,7 +1,17 @@
 import React from "react";
-import { Modal, Form, Button, ModalDialog, ModalBody, ModalHeader } from "react-bootstrap";
+import { Modal, Form, Button } from "react-bootstrap";
 
-const Login = ({show, setShow}) => {
+const Login = ({show, setShow, login, logout}) => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessages, setErrorMessages] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const credentials = {username, password};
+    
+  }
 
   return (
     // Login Modal
@@ -14,9 +24,9 @@ const Login = ({show, setShow}) => {
       //   aria-labelledby="loginModalLabel"
       //   aria-hidden="true"
     >
-      <ModalDialog className="m-0">
-        <ModalBody className="p-0">
-          <ModalHeader>
+      <Modal.Dialog className="m-0">
+        <Modal.Body className="p-0">
+          <Modal.Header>
             <h5 className="modal-title" id="loginModalLabel">
               Login
             </h5>
@@ -29,7 +39,7 @@ const Login = ({show, setShow}) => {
             >
               <span aria-hidden="true">&times;</span>
             </button>
-          </ModalHeader>
+          </Modal.Header>
           <div className="modal-body">
             <form>
               <Form.Group className="mb-3">
@@ -55,8 +65,8 @@ const Login = ({show, setShow}) => {
               </Button>
             </form>
           </div>
-        </ModalBody>
-      </ModalDialog>
+        </Modal.Body>
+      </Modal.Dialog>
     </Modal>
   );
 };

@@ -9,12 +9,12 @@ import Phase3 from "./components/Phase/Phase3";
 import "./App.css";
 
 function App() {
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(true);
   const [user, setUser] = useState(null);
   const [shouldRefresh, setShouldRefresh] = useState(false);
 
-  // state PHASE definition
-  const [phase, setPhase] = useState(3);
+  // state PHASE
+  const [phase, setPhase] = useState(1);
   const phaseName = [
     "Phase 0 - Budget definition",
     "Phase 1 - Proposal insertion",
@@ -30,7 +30,7 @@ function App() {
 
   return (
     <>
-      <Header isAdmin={true} user={user} setUser={setUser} />
+      <Header isAdmin={isAdmin} user={user} setUser={setUser} />
 
       <Container id="content" className="pt-5 mt-5 mb-5">
         <h1 className="text-center">{phaseName[phase]}</h1>

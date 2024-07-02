@@ -6,7 +6,7 @@ import Authenticator from "./route/auth.route.mjs";
 import ProposalRoutes from "./route/proposal.route.mjs";
 import VoteRoutes from "./route/vote.route.mjs";
 
-const prefix = "/socialbudget";
+const prefix = "/socialbudget/api";
 
 /**
  * Initializes the routes for the application.
@@ -21,9 +21,9 @@ function initRoutes(app) {
   const proposalRoutes = new ProposalRoutes(authRoutes);
   const voteRoutes = new VoteRoutes(authRoutes);
 
-  app.use(`${prefix}/api/sessions`, authRoutes.getRouter());
-  app.use(`${prefix}/api/proposals`, proposalRoutes.getRouter());
-  app.use(`${prefix}/api/votes`, voteRoutes.getRouter());
+  app.use(`${prefix}/sessions`, authRoutes.getRouter());
+  app.use(`${prefix}/proposals`, proposalRoutes.getRouter());
+  app.use(`${prefix}/votes`, voteRoutes.getRouter());
 }
 
 export default initRoutes;

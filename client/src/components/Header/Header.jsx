@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Nav, Navbar, Button } from "react-bootstrap";
 import Login from "../Auth/Login";
 
-const Header = ({ isAdmin }) => {
+const Header = ({ isAdmin, user, setUser }) => {
   const [show, setShow] = useState(false);
 
   return (
@@ -15,10 +15,23 @@ const Header = ({ isAdmin }) => {
             {">>"} next phase {"<<"}
           </Button>
         )}
-
-        <Button className="btn-info mr-5" type="button" id="loginButton" onClick={() => setShow(true)}>
-          Login
-        </Button>
+        {user ? (
+          <div>
+            <Navbar.Brand className="ml-5 mr-3">{user.username}</Navbar.Brand>
+            <button className="btn btn-info mr-5" type="button">
+              Logout
+            </button>
+          </div>
+        ) : (
+          <Button
+            className="btn-info mr-5"
+            type="button"
+            id="loginButton"
+            onClick={() => setShow(true)}
+          >
+            Login
+          </Button>
+        )}
       </Nav>
 
       <Login show={show} setShow={setShow} />

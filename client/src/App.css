@@ -81,6 +81,10 @@ body {
   margin-left: 9em;
 }
 
+#brandSocialBudget {
+  margin-right: 1em;
+}
+
 button[type="submit"] {
   font-size: 1.1em;
 }
