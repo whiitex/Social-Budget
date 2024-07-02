@@ -8,7 +8,7 @@ const Phase0 = () => {
     <div id="budget" className="row mb-5">
       {/* Form for inserting budget amound */}
       <Container className="mt-4 pt-5 d-flex justify-content-center">
-        <div id="budget-definition" class="col-11 col-sm-11 col-md-10 col-lg-8">
+        <div id="budget-definition" className="col-11 col-sm-11 col-md-10 col-lg-8">
           <h3>Define budget amount</h3>
 
           <form className="mt-4">

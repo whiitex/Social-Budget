@@ -16,6 +16,14 @@ body {
     flex: 1;
 }
 
+#closeLoginModal, #closeLoginModal:focus, #closeLoginModal:active {
+    background: none;
+	color: none;
+	border: none;
+	cursor: pointer;
+	outline: none !important;
+}
+
 #adminButton {
 	background: none;
 	color: inherit;

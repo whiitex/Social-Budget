@@ -30,7 +30,7 @@ function App() {
 
   return (
     <>
-      <Header isAdmin={true} />
+      <Header isAdmin={true} user={user} setUser={setUser} />
 
       <Container id="content" className="pt-5 mt-5 mb-5">
         <h1 className="text-center">{phaseName[phase]}</h1>
