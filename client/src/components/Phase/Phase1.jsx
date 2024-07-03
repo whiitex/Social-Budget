@@ -55,7 +55,13 @@ const Phase1 = ({ user }) => {
   const handleSetCost = (e) => {
     let flag = true;
     for (const char of e.target.value) {
-      if (!parseInt(char) && char !== "." && char !== "," && parseInt(char) !== 0) flag = false;
+      if (
+        !parseInt(char) &&
+        char !== "." &&
+        char !== "," &&
+        parseInt(char) !== 0
+      )
+        flag = false;
     }
     if (!flag && e.target.value !== "")
       setErrorMessage("Cost must be a number");
@@ -66,18 +72,19 @@ const Phase1 = ({ user }) => {
   };
 
   return (
-    <div id="proposals" className="row mb-5">
-      {proposals.map((proposal, index) => (
-        <Proposal1
-          key={proposal.id}
-          proposal={proposal}
-          setShouldRefresh={setShouldRefresh}
-          setErrorMessage={setErrorMessage}
-          setCost={setCost}
-          setDescription={setDescription}
-        />
-      ))}
-
+    <div id="proposals" className="mb-5">
+      <div className="row">
+        {proposals.map((proposal, index) => (
+          <Proposal1
+            key={proposal.id}
+            proposal={proposal}
+            setShouldRefresh={setShouldRefresh}
+            setErrorMessage={setErrorMessage}
+            setCost={setCost}
+            setDescription={setDescription}
+          />
+        ))}
+      </div>
       {/* Form for inserting a new proposal */}
       <Container className="mt-4 pt-5">
         <div className="row justify-content-center">

@@ -22,16 +22,17 @@ const Proposal1 = ({
     const cost =
       e.target.parentElement.parentElement.children[1].innerText.split("$")[1];
 
-    ProposalAPI.removeProposal({ id: id })
+
+      ProposalAPI.removeProposal({ id: proposal.id })
       .then(() => {
         setShouldRefresh(true);
         // description update
-        e.target.parentElement.parentElement.parentElement.parentElement.children[1].children[0].children[0].children[1].children[0].children[1].value =
+        e.target.parentElement.parentElement.parentElement.parentElement.parentElement.children[1].children[0].children[0].children[1].children[0].children[1].value =
           description;
         setDescription(description);
 
         // // cost update
-        e.target.parentElement.parentElement.parentElement.parentElement.children[1].children[0].children[0].children[1].children[1].children[0].children[0].children[1].value =
+        e.target.parentElement.parentElement.parentElement.parentElement.parentElement.children[1].children[0].children[0].children[1].children[1].children[0].children[0].children[1].value =
           cost;
         setCost(cost);
       })
