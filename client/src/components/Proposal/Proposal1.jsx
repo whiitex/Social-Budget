@@ -4,16 +4,14 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import ProposalAPI from "../../API/proposal.api.mjs";
 
 const Proposal1 = ({
-  id,
-  cost,
-  description,
+  proposal,
   setShouldRefresh,
   setErrorMessage,
   setCost,
   setDescription,
 }) => {
   const handleDelete = (e) => {
-    ProposalAPI.removeProposal({ id: id })
+    ProposalAPI.removeProposal({ id: proposal.id })
       .then(() => setShouldRefresh(true))
       .catch((err) => setErrorMessage(err.message));
   };
@@ -41,11 +39,11 @@ const Proposal1 = ({
   };
 
   return (
-    <div className="col-md-4">
+    <div className="col-md-4 col-sm-6 col-6">
       <div className="box approved">
-        <p className="box-description">{description}</p>
+        <p className="box-description">{proposal.description}</p>
         <p>
-          <strong>Cost:</strong> ${cost}
+          <strong>Cost:</strong> ${proposal.cost}
         </p>
         <div className="d-flex justify-content-around align-items-center">
           <Button onClick={handleEdit} className="btn-warning mt-2">

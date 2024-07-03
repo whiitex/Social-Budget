@@ -55,9 +55,10 @@ const Phase1 = ({ user }) => {
   const handleSetCost = (e) => {
     let flag = true;
     for (const char of e.target.value) {
-      if (!parseInt(char) && char !== '.' && char !== ',') flag = false;
+      if (!parseInt(char) && char !== "." && char !== "," && parseInt(char) !== 0) flag = false;
     }
-    if (!flag && e.target.value !== "") setErrorMessage("Cost must be a number");
+    if (!flag && e.target.value !== "")
+      setErrorMessage("Cost must be a number");
     else {
       setErrorMessage("");
       setCost(parseFloat(e.target.value));
@@ -69,9 +70,7 @@ const Phase1 = ({ user }) => {
       {proposals.map((proposal, index) => (
         <Proposal1
           key={proposal.id}
-          id={proposal.id}
-          cost={proposal.cost}
-          description={proposal.description}
+          proposal={proposal}
           setShouldRefresh={setShouldRefresh}
           setErrorMessage={setErrorMessage}
           setCost={setCost}

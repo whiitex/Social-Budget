@@ -25,19 +25,19 @@ const Proposal2 = ({ proposal, votes, setShouldRefresh, mine }) => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (score) => (e) => {
     e.preventDefault();
 
     if (errorMessage !== "") return;
     setChangeVote(false);
 
-    VoteAPI.insertVote(proposal, newVote || 0)
+    VoteAPI.insertVote(proposal, score || 0)
       .then(() => setShouldRefresh(true))
       .catch((err) => setErrorMessage(err.message));
   };
 
   return (
-    <div className="col-md-4">
+    <div className="col-md-4 col-sm-6 col-6">
       <div className={"box" + (mine ? "" : " approved")}>
         <p className="box-description">{proposal.description}</p>
         <p>
@@ -68,7 +68,7 @@ const Proposal2 = ({ proposal, votes, setShouldRefresh, mine }) => {
             </Button>
           )}
           {changeVote && !mine ? (
-            <Form onSubmit={handleSubmit} className="row ml-0 mt-1">
+            <Form onSubmit={handleSubmit(newVote)} className="row ml-0 mt-1">
               <Form.Group className="ml-3 mb-2" id="insertVoteInput">
                 <input
                   className="form-control inputText"
@@ -83,7 +83,21 @@ const Proposal2 = ({ proposal, votes, setShouldRefresh, mine }) => {
             </Form>
           ) : !mine ? (
             <p className="ml-3 mb-0 pb-0">vote: {votes}</p>
-          ) : (<></>)}
+          ) : (
+            <></>
+          )}
+
+          {!changeVote && !mine ? (
+            <Button
+              onClick={handleSubmit(0)}
+              style={{ width: "4em" }}
+              className="btn-danger ml-3 mt-2 mb-2"
+            >
+              <i className="bi bi-trash" />
+            </Button>
+          ) : (
+            <></>
+          )}
         </div>
       </div>
     </div>

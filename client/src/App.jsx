@@ -30,7 +30,7 @@ function App() {
   };
 
   // state PHASE
-  const [phase, setPhase] = useState(2);
+  const [phase, setPhase] = useState(0);
   const phaseName = [
     "Phase 0 - Budget definition",
     "Phase 1 - Proposal insertion",

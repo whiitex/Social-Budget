@@ -3,7 +3,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 
 const Proposal3 = ({ isapproved, description, cost, score, author }) => {
   return (
-    <div className="col-md-4">
+    <div className="col-md-4 col-sm-6 col-6">
       <div className={"box" + (isapproved ? " approved" : "")}>
         <i className="bi bi-file-check verified-icon mr-2 mt-2"></i>
         <h4># 1</h4>
