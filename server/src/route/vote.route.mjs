@@ -17,6 +17,16 @@ class VoteRoutes {
 
   initRoutes() {
     /**
+     * Get the score of all proposals
+     */
+    this.router.get("/", (req, res, next) => {
+      this.voteController
+        .getScore()
+        .then((score) => res.status(200).json(score))
+        .catch((err) => next(err));
+    });
+
+    /**
      * Modify the score of a proposal
      * It requires the user to be logged in.
      * The proposal id and the rating are sent in the request body.
@@ -25,7 +35,7 @@ class VoteRoutes {
      */
     this.router.post("/", this.authenticator.isLoggedIn, (req, res, next) => {
       this.voteController
-        .increaseScore(req.user, req.body.id, req.body.rating)
+        .insertScore(req.user, req.body.id, req.body.rating)
         .then((proposal) => res.status(200).json(proposal))
         .catch((err) => next(err));
     });

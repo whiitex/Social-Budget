@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Modal, Form, Button } from "react-bootstrap";
 
-const Login = ({ show, setShow, handleLogin }) => {
+const Login = ({ show, setShow, handleLogin, setShouldRefresh }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -17,6 +17,7 @@ const Login = ({ show, setShow, handleLogin }) => {
       .then(() => {
         setErrorMessage("");
         setShow(false);
+        setShouldRefresh(true);
       })
       .catch((err) => {
         if (err.message === "Unauthorized")

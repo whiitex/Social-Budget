@@ -4,6 +4,19 @@ import db from "../db/db.mjs";
 
 class VoteDAO {
   /**
+   * Returns the score of all proposals.
+   */
+  async getScore() {
+    return new Promise((resolve, reject) => {
+      const sql = `SELECT * FROM votes`;
+      db.all(sql, [], (err, rows) => {
+        if (err) reject(err);
+        else resolve(rows);
+      });
+    });
+  }
+
+  /**
    * Increases the score of a proposal.
    * @param proposal
    * @param rating range [1,3]
@@ -22,7 +35,7 @@ class VoteDAO {
           if (err) reject(err);
           // update the vote of the user
           else if (row) {
-            const sql = `UPDATE votes SET rating = ? WHERE proposal_id = ? AND voter = ?`;
+            const sql = `UPDATE votes SET score = ? WHERE proposal_id = ? AND voter = ?`;
             db.run(sql, [rating, proposal.id, user.username], (err) => {
               if (err) reject(err);
               else resolve(true);
@@ -30,7 +43,7 @@ class VoteDAO {
           }
           // insert a new vote
           else {
-            const sql = `INSERT INTO votes (proposal_id, voter, rating) VALUES (?, ?, ?)`;
+            const sql = `INSERT INTO votes (proposal_id, voter, score) VALUES (?, ?, ?)`;
             db.run(sql, [proposal.id, user.username, rating], (err) => {
               if (err) reject(err);
               else resolve(true);

@@ -1,18 +1,89 @@
-import React from "react";
+import React, { useState } from "react";
+import { Button, Form } from "react-bootstrap";
+import VoteAPI from "../../API/vote.api.mjs";
 
-const Proposal2 = ({cost, desciption, votes}) => {
+const Proposal2 = ({ proposal, votes, setShouldRefresh, mine }) => {
+  const [errorMessage, setErrorMessage] = useState("");
+  const [changeVote, setChangeVote] = useState(false);
+  const [newVote, setNewVote] = useState(0);
+
+  const handleChangeVote = (e) => {
+    e.preventDefault();
+    const vote = parseInt(e.target.value);
+    if (
+      vote !== 0 &&
+      vote !== 1 &&
+      vote !== 2 &&
+      vote !== 3 &&
+      e.target.value !== ""
+    ) {
+      setErrorMessage("Vote must be an integer x ≤ 3");
+      return;
+    } else {
+      setErrorMessage("");
+      setNewVote(vote);
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (errorMessage !== "") return;
+    setChangeVote(false);
+
+    VoteAPI.insertVote(proposal, newVote || 0)
+      .then(() => setShouldRefresh(true))
+      .catch((err) => setErrorMessage(err.message));
+  };
+
   return (
     <div className="col-md-4">
-      <div className="box approved">
-        <p className="box-description">{desciption}</p>
+      <div className={"box" + (mine ? "" : " approved")}>
+        <p className="box-description">{proposal.description}</p>
         <p>
-          <strong>Cost:</strong> ${cost}
+          <strong>Cost:</strong> ${proposal.cost}
         </p>
+        {errorMessage !== "" ? (
+          <Form.Group className="mb-0">
+            <p style={{ color: "red" }} className="mb-0">
+              {errorMessage}
+            </p>
+          </Form.Group>
+        ) : (
+          <></>
+        )}
         <div className="d-flex align-items-center">
-          <button className="btn btn-warning mt-2">
-            <i className="bi bi-star"></i> Edit
-          </button>
-          <p className="ml-3 mb-0 pb-0">vote: {votes}</p>
+          {mine ? (
+            <></>
+          ) : (
+            <Button
+              onClick={() => {
+                setChangeVote(!changeVote);
+                setNewVote(0);
+                setErrorMessage("");
+              }}
+              className="btn-warning mt-2 mb-2"
+            >
+              <i className="bi bi-star" /> Edit
+            </Button>
+          )}
+          {changeVote && !mine ? (
+            <Form onSubmit={handleSubmit} className="row ml-0 mt-1">
+              <Form.Group className="ml-3 mb-2" id="insertVoteInput">
+                <input
+                  className="form-control inputText"
+                  id="description"
+                  rows="3"
+                  onChange={handleChangeVote}
+                ></input>
+              </Form.Group>
+              <Button type="submit" className="btn-danger ml-3 mb-2">
+                Vote!
+              </Button>
+            </Form>
+          ) : !mine ? (
+            <p className="ml-3 mb-0 pb-0">vote: {votes}</p>
+          ) : (<></>)}
         </div>
       </div>
     </div>

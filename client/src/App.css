@@ -99,6 +99,12 @@ textarea:active {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
+#insertVoteInput {
+  width: 5em;
+  height: min-content;
+  font-size: 1em;
+}
+
 /* --------------- */
 /* Phase 0 = Budget */
 .bi-chevron-compact-up,

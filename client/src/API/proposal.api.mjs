@@ -39,16 +39,14 @@ const insertProposal = async (proposal) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(proposal),
-  })
+  });
   if (!response.ok) {
     const error = await response.json();
     if (error.message) throw error;
-    else throw {message: "Something went wrong"};
+    else throw { message: "Something went wrong" };
   } else {
     return response;
-  
   }
-
 };
 
 /**
@@ -70,7 +68,7 @@ const editProposal = async (proposal) => {
 /**
  * Remove a proposal
  * It requires the user to be logged in.
- * @param {id, } proposal
+ * @param {id} proposal
  */
 const removeProposal = async (proposal) => {
   return await fetch(SERVER_URL + "/", {

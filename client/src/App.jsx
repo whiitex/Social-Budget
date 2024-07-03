@@ -7,6 +7,7 @@ import Phase1 from "./components/Phase/Phase1";
 import Phase2 from "./components/Phase/Phase2";
 import Phase3 from "./components/Phase/Phase3";
 import AuthAPI from "./API/auth.api.mjs";
+import ProposalAPI from "./API/proposal.api.mjs";
 import "./App.css";
 
 function App() {
@@ -29,7 +30,7 @@ function App() {
   };
 
   // state PHASE
-  const [phase, setPhase] = useState(0);
+  const [phase, setPhase] = useState(2);
   const phaseName = [
     "Phase 0 - Budget definition",
     "Phase 1 - Proposal insertion",
@@ -37,9 +38,6 @@ function App() {
     "Final phase - Decision announcement",
     "Loading...",
   ];
-  const handlePhase = (p) => {
-    setPhase(p);
-  };
 
   // state BUDGET
   const [budget, setBudget] = useState(0);
@@ -55,14 +53,18 @@ function App() {
       .then((user) => {
         setUser(user);
         setIsAdmin(user.isadmin);
+        if (!user) return;
+        ProposalAPI.getAllProposals()
+          .then((propos) => {
+            setProposals(propos);
+          })
+          .catch((err) => console.error(err.message));
       })
       .catch((err) => {
         setUser(null);
         setIsAdmin(false);
       });
-    
-      
-  }, []);
+  }, [shouldRefresh]);
 
   return (
     <>
@@ -72,6 +74,7 @@ function App() {
         phase={phase}
         handleLogin={handleLogin}
         handleLogout={handleLogout}
+        setShouldRefresh={setShouldRefresh}
       />
 
       <Container id="content" className="pt-5 mt-5 mb-5">
@@ -102,18 +105,14 @@ function App() {
               Please login to assign preferences
             </h3>
           ) : proposals.length === 0 ? (
-            <div className="text-center">
-              <h2>No proposals...</h2>
-            </div>
+            <h3 className="text-center mt-5">No proposals...</h3>
           ) : (
-            <Phase2 proposals={proposals} />
+            <Phase2 proposals={proposals} user={user} />
           )
         ) : // Final phase - Decision announcement
         phase === 3 ? (
           proposals.length === 0 ? (
-            <div className="text-center">
-              <h2>No proposals...</h2>
-            </div>
+            <h3 className="text-center mt-5">No proposals...</h3>
           ) : (
             <Phase3 proposals={[]} budget={500} />
           )

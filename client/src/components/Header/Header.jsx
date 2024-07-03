@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Nav, Navbar, Button } from "react-bootstrap";
 import Login from "../Auth/Login";
 
-const Header = ({ isAdmin, user, phase, handleLogin, handleLogout }) => {
+const Header = ({ isAdmin, user, phase, handleLogin, handleLogout, setShouldRefresh }) => {
   const [show, setShow] = useState(false);
 
   return (
@@ -41,7 +41,7 @@ const Header = ({ isAdmin, user, phase, handleLogin, handleLogout }) => {
         )}
       </Nav>
 
-      <Login show={show} setShow={setShow} handleLogin={handleLogin} />
+      <Login show={show} setShow={setShow} handleLogin={handleLogin} setShouldRefresh={setShouldRefresh}/>
     </>
   );
 };
