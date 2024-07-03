@@ -16,7 +16,12 @@ class ProposalController {
   }
 
   async insertProposal(user, proposal) {
-    return this.dao.insertProposal(user, proposal);
+    return new Promise((resolve, reject) => {
+      this.dao.insertProposal(user, proposal)
+      .then(() => resolve(true))
+      .catch((err) => reject(err));
+    })
+    
   }
 
   async editProposal(user, proposal) {

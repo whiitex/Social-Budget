@@ -61,12 +61,16 @@ class ProposalRoutes {
      *  - cost: number
      *  - is_approved: boolean
      */
-    this.router.put("/edit", this.authenticator.isLoggedIn, (req, res, next) => {
-      this.proposalController
-        .editProposal(req.user, req.body)
-        .then((proposal) => res.status(200).json(proposal))
-        .catch((err) => next(err));
-    });
+    this.router.put(
+      "/edit",
+      this.authenticator.isLoggedIn,
+      (req, res, next) => {
+        this.proposalController
+          .editProposal(req.user, req.body)
+          .then((proposal) => res.status(200).json(proposal))
+          .catch((err) => next(err));
+      }
+    );
 
     /**
      * Remove a proposal

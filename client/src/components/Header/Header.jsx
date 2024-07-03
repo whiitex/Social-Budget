@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Nav, Navbar, Button } from "react-bootstrap";
 import Login from "../Auth/Login";
 
-const Header = ({ isAdmin, user, handleLogin, handleLogout }) => {
+const Header = ({ isAdmin, user, phase, handleLogin, handleLogout }) => {
   const [show, setShow] = useState(false);
 
   return (
@@ -10,7 +10,7 @@ const Header = ({ isAdmin, user, handleLogin, handleLogout }) => {
       <Nav className="navbar-expand-lg navbar-dark bg-dark text-white py-3 fixed-top d-flex justify-content-between">
         <Navbar.Brand className="ml-5 mr-0">Social Budget 2024</Navbar.Brand>
 
-        {isAdmin ? (
+        {isAdmin && phase > 0 ? (
           <Button type="button" id="adminButton">
             {">> next phase <<"}
           </Button>

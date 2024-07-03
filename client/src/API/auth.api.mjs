@@ -31,7 +31,6 @@ const getUserInfo = async () => {
   })
     .then(handleInvalidResponse)
     .then((response) => response.json())
-    .catch((err) => {});
 };
 
 /**

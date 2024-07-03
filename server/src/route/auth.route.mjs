@@ -87,7 +87,7 @@ class Authenticator {
      * It requires the user to be logged in.
      * It returns the current user.
      */
-    this.router.get("/current", this.isLoggedIn, (req, res) => {
+    this.router.get("/current", (req, res) => {
       res.status(200).json(req.user);
     });
   }

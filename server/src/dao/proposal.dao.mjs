@@ -55,7 +55,7 @@ class ProposalDAO {
             }
           );
           // user has already submitted 3 proposals
-        } else reject(new Error("User has already submitted 3 proposals"));
+        } else reject(new Error("You have already submitted 3 proposals"));
       });
     });
   }

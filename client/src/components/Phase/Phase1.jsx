@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Form } from "react-bootstrap";
+import { Container, Form, Button } from "react-bootstrap";
 import Proposal1 from "../Proposal/Proposal1";
 import DigitalButtons from "../Utility/DigitalButtons";
 import "bootstrap-icons/font/bootstrap-icons.css";
@@ -80,9 +80,9 @@ const Phase1 = ({ user }) => {
               <Form.Group className="mb-3">
                 <p style={{ color: "red" }}>{errorMessage}</p>
               </Form.Group>
-              <button type="submit" className="btn btn-primary">
+              <Button type="submit" className="btn-primary">
                 Submit
-              </button>
+              </Button>
             </Form>
           </div>
         </div>

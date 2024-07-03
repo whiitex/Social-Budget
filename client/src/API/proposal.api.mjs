@@ -32,14 +32,23 @@ const getAllProposals = async () => {
  * @param {description, cost} proposal
  */
 const insertProposal = async (proposal) => {
-  return await fetch(SERVER_URL + "/", {
+  const response = await fetch(SERVER_URL + "/", {
     method: "PUT",
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(proposal),
-  });
+  })
+  if (!response.ok) {
+    const error = await response.json();
+    if (error.message) throw error;
+    else throw {message: "Something went wrong"};
+  } else {
+    return response;
+  
+  }
+
 };
 
 /**

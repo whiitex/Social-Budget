@@ -1,6 +1,6 @@
-export default function handleInvalidResponse(response) {
+export default async function handleInvalidResponse(response) {
   if (!response.ok) {
-    throw Error(response.statusText);
+    throw await response.json();
   }
   let type = response.headers.get("Content-Type");
   if (type !== null && type.indexOf("application/json") === -1) {

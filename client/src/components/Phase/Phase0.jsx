@@ -23,7 +23,6 @@ const Phase0 = ({ handleBudget, isAdmin }) => {
     <div id="budget" className="row mb-5">
       {/* Form for inserting budget amound */}
       <Container className="mt-4 pt-5 d-flex justify-content-center">
-        {isAdmin ? (
           <div
             id="budget-definition"
             className="col-11 col-sm-11 col-md-10 col-lg-8"
@@ -54,9 +53,6 @@ const Phase0 = ({ handleBudget, isAdmin }) => {
               </div>
             </form>
           </div>
-        ) : (
-          <h3>Waiting for the admin to define the budget amount</h3>
-        )}
       </Container>
     </div>
   );

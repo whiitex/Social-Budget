@@ -29,7 +29,7 @@ function App() {
   };
 
   // state PHASE
-  const [phase, setPhase] = useState(1);
+  const [phase, setPhase] = useState(0);
   const phaseName = [
     "Phase 0 - Budget definition",
     "Phase 1 - Proposal insertion",
@@ -45,10 +45,11 @@ function App() {
   const [budget, setBudget] = useState(0);
   const handleBudget = (b) => {
     setBudget(b);
-  }
+  };
 
   const [proposals, setProposals] = useState([]);
 
+  // get current user info, if cookies are set
   useEffect(() => {
     AuthAPI.getUserInfo()
       .then((user) => {
@@ -59,6 +60,8 @@ function App() {
         setUser(null);
         setIsAdmin(false);
       });
+    
+      
   }, []);
 
   return (
@@ -66,6 +69,7 @@ function App() {
       <Header
         isAdmin={isAdmin}
         user={user}
+        phase={phase}
         handleLogin={handleLogin}
         handleLogout={handleLogout}
       />
@@ -75,18 +79,34 @@ function App() {
 
         {/* Phase 0 - Budget definition */}
         {phase === 0 ? (
-          <Phase0 handleBudget={handleBudget} isAdmin={isAdmin} />
+          isAdmin ? (
+            <Phase0 handleBudget={handleBudget} isAdmin={isAdmin} />
+          ) : (
+            <h3 className="text-center mt-5">
+              Waiting for the admin to define the budget amount
+            </h3>
+          )
         ) : // Phase 1 - Proposal insertion
         phase === 1 ? (
-          <Phase1 user={user}/>
+          user ? (
+            <Phase1 user={user} />
+          ) : (
+            <h3 className="text-center mt-5">
+              Please login to insert a proposal
+            </h3>
+          )
         ) : // Phase 2 - Preference assignment
         phase === 2 ? (
-          proposals.length === 0 ? (
+          !user ? (
+            <h3 className="text-center mt-5">
+              Please login to assign preferences
+            </h3>
+          ) : proposals.length === 0 ? (
             <div className="text-center">
               <h2>No proposals...</h2>
             </div>
           ) : (
-            <Phase2 proposals={[1, 2]} />
+            <Phase2 proposals={proposals} />
           )
         ) : // Final phase - Decision announcement
         phase === 3 ? (
