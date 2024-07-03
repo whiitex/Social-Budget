@@ -45,7 +45,7 @@ class ProposalRoutes {
      *  - description: string,
      *  - cost: number
      */
-    this.router.post("/", this.authenticator.isLoggedIn, (req, res, next) => {
+    this.router.put("/", this.authenticator.isLoggedIn, (req, res, next) => {
       this.proposalController
         .insertProposal(req.user, req.body)
         .then((proposal) => res.status(200).json(proposal))
@@ -61,7 +61,7 @@ class ProposalRoutes {
      *  - cost: number
      *  - is_approved: boolean
      */
-    this.router.put("/", this.authenticator.isLoggedIn, (req, res, next) => {
+    this.router.put("/edit", this.authenticator.isLoggedIn, (req, res, next) => {
       this.proposalController
         .editProposal(req.user, req.body)
         .then((proposal) => res.status(200).json(proposal))
@@ -95,27 +95,6 @@ class ProposalRoutes {
         .then((ok) => res.status(200).json(ok))
         .catch((err) => next(err));
     });
-
-    /**
-     * Increase the score of a proposal
-     * It requires the user to be logged in.
-     * The proposal is sent in the request body.
-     *   - id: number
-     *   - author: string
-     *   - description: string
-     *   - cost: number
-     *   - is_approved: boolean
-     */
-    this.router.put(
-      "/score",
-      this.authenticator.isLoggedIn,
-      (req, res, next) => {
-        this.proposalController
-          .increaseScore(req.user, req.body, req.query.rating)
-          .then((proposal) => res.status(200).json(proposal))
-          .catch((err) => next(err));
-      }
-    );
   }
 }
 

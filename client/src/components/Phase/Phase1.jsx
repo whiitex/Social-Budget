@@ -1,11 +1,36 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Form } from "react-bootstrap";
 import Proposal1 from "../Proposal/Proposal1";
 import DigitalButtons from "../Utility/DigitalButtons";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import ProposalAPI from "../../API/proposal.api.mjs";
 
-const Phase1 = () => {
-  const [proposals, setProposals] = useState([1, 2, 3]);
+const Phase1 = ({ user }) => {
+  const [proposals, setProposals] = useState([]);
+  const [description, setDescription] = useState("");
+  const [cost, setCost] = useState(0);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  useEffect(() => {
+    ProposalAPI.getAllProposals()
+      .then((propos) => {
+        setErrorMessage("");
+        setProposals(propos.filter((p) => p.author === user.username));
+      })
+      .catch((err) => setErrorMessage(err.message));
+  }, [user]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const proposal = { description, cost };
+    e.target.reset();
+    setDescription("");
+    setCost(0);
+
+    ProposalAPI.insertProposal(proposal)
+      .then(() => setProposals([...proposals, proposal]))
+      .catch((err) => setErrorMessage(err.message));
+  };
 
   return (
     <div id="proposals" className="row mb-5">
@@ -22,7 +47,7 @@ const Phase1 = () => {
         <div className="row justify-content-center">
           <div className="col-10 col-sm-10 col-md-9 col-lg-7">
             <h3>Insert new proposal</h3>
-            <Form>
+            <Form onSubmit={handleSubmit}>
               <Form.Group>
                 <label className="mb-1" htmlFor="description">
                   Description
@@ -32,6 +57,7 @@ const Phase1 = () => {
                   id="description"
                   rows="3"
                   placeholder="Enter description"
+                  onChange={(e) => setDescription(e.target.value)}
                 ></textarea>
               </Form.Group>
               <Form.Group className="row">
@@ -45,10 +71,14 @@ const Phase1 = () => {
                       className="form-control inputText"
                       id="cost"
                       placeholder="Enter value"
+                      onChange={(e) => setCost(parseFloat(e.target.value))}
                     />
                   </div>
                   <DigitalButtons margintop="mt-4" />
                 </div>
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <p style={{ color: "red" }}>{errorMessage}</p>
               </Form.Group>
               <button type="submit" className="btn btn-primary">
                 Submit

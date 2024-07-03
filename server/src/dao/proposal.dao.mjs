@@ -40,15 +40,15 @@ class ProposalDAO {
   async insertProposal(user, proposal) {
     return new Promise((resolve, reject) => {
       // check if the user has already submitted 3 proposals
-      const sqlCheck = `SELECT * count FROM proposals WHERE author = ?`;
+      const sqlCheck = `SELECT * FROM proposals WHERE author = ?`;
       db.all(sqlCheck, [user.username], (err, rows) => {
         if (err) reject(err);
         // user can submit a proposal
         else if (!rows || rows.length < 3) {
-          const sql = `INSERT INTO proposals (author, description, cost, is_approved)VALUES (?, ?, ?, ?)`;
+          const sql = `INSERT INTO proposals (author, description, cost)VALUES (?, ?, ?)`;
           db.run(
             sql,
-            [user.username, proposal.description, proposal.cost, false],
+            [user.username, proposal.description, proposal.cost || 0],
             (err) => {
               if (err) reject(err);
               else resolve(true);

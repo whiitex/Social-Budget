@@ -6,7 +6,7 @@ import Phase0 from "./components/Phase/Phase0";
 import Phase1 from "./components/Phase/Phase1";
 import Phase2 from "./components/Phase/Phase2";
 import Phase3 from "./components/Phase/Phase3";
-import AuthAPI from "./API/auth.mjs";
+import AuthAPI from "./API/auth.api.mjs";
 import "./App.css";
 
 function App() {
@@ -29,7 +29,7 @@ function App() {
   };
 
   // state PHASE
-  const [phase, setPhase] = useState(0);
+  const [phase, setPhase] = useState(1);
   const phaseName = [
     "Phase 0 - Budget definition",
     "Phase 1 - Proposal insertion",
@@ -41,6 +41,12 @@ function App() {
     setPhase(p);
   };
 
+  // state BUDGET
+  const [budget, setBudget] = useState(0);
+  const handleBudget = (b) => {
+    setBudget(b);
+  }
+
   const [proposals, setProposals] = useState([]);
 
   useEffect(() => {
@@ -48,7 +54,6 @@ function App() {
       .then((user) => {
         setUser(user);
         setIsAdmin(user.isadmin);
-        console.log(user);
       })
       .catch((err) => {
         setUser(null);
@@ -70,10 +75,10 @@ function App() {
 
         {/* Phase 0 - Budget definition */}
         {phase === 0 ? (
-          <Phase0 />
+          <Phase0 handleBudget={handleBudget} isAdmin={isAdmin} />
         ) : // Phase 1 - Proposal insertion
         phase === 1 ? (
-          <Phase1 />
+          <Phase1 user={user}/>
         ) : // Phase 2 - Preference assignment
         phase === 2 ? (
           proposals.length === 0 ? (

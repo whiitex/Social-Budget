@@ -50,10 +50,11 @@ class PhaseDAO {
    */
   async resetAll() {
     return new Promise((resolve, reject) => {
-      let promise = [];
+      let promises = [];
+      // restore all tables
       const tables = ["proposals", "state", "votes"];
       for (const table of tables) {
-        promise.push(
+        promises.push(
           new Promise((resolve, reject) => {
             const sql = `DELETE FROM ${table}`;
             db.run(sql, [], (err) => {
@@ -63,7 +64,17 @@ class PhaseDAO {
           })
         );
       }
-      Promise.all(promise)
+      // init state 0
+      promises.push(
+        new Promise((resolve, reject) => {
+          const sql = `INSERT INTO state (phase, budget) VALUES (0, 0)`;
+          db.run(sql, [], (err) => {
+            if (err) reject(err);
+            else resolve(true);
+          });
+        })
+      );
+      Promise.all(promises)
         .then(() => resolve(true))
         .catch((err) => reject(err));
     });

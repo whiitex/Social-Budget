@@ -19,7 +19,6 @@ const Login = ({ show, setShow, handleLogin }) => {
         setShow(false);
       })
       .catch((err) => {
-        console.log(err);
         if (err.message === "Unauthorized")
           setErrorMessage("Invalid username and/or password");
         else setErrorMessage(err.message);

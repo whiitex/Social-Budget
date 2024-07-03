@@ -140,7 +140,8 @@ class Authenticator {
    * Middleware to check if a user is an admin
    */
   isAdmin(req, res, next) {
-    if (req.isAuthenticated() && req.user.isAdmin) next();
+    console.log(req.user);
+    if (req.isAuthenticated() && req.user.isadmin) next();
     else res.status(403).send("Forbidden");
   }
 }

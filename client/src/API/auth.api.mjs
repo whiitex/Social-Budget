@@ -1,6 +1,6 @@
 import handleInvalidResponse from "./utils.mjs";
 
-const SERVER_URL = "http://localhost:3001/socialbudget/api";
+const SERVER_URL = "http://localhost:3001/socialbudget/api/sessions";
 
 /**
  * Log in the user - if credentials are correct
@@ -8,7 +8,7 @@ const SERVER_URL = "http://localhost:3001/socialbudget/api";
  * @returns the user if correctly logged in
  */
 const login = async (credentials) => {
-  return await fetch(SERVER_URL + "/sessions", {
+  return await fetch(SERVER_URL + "/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -25,7 +25,7 @@ const login = async (credentials) => {
  * @returns the user if correctly logged in
  */
 const getUserInfo = async () => {
-  return await fetch(SERVER_URL + "/sessions/current", {
+  return await fetch(SERVER_URL + "/current", {
     method: "GET",
     credentials: "include",
   })
@@ -38,7 +38,7 @@ const getUserInfo = async () => {
  * Log out the user
  */
 const logout = async () => {
-  return await fetch(SERVER_URL + "/sessions/current", {
+  return await fetch(SERVER_URL + "/current", {
     method: "DELETE",
     credentials: "include",
   })
