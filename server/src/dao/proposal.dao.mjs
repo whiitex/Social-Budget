@@ -27,14 +27,16 @@ class ProposalDAO {
       db.get(sqlPhase, [], (err, row) => {
         if (err) reject(err);
         else {
+          // not the final phase
           if (!row || row.phase !== 3) {
             const sql = `SELECT * FROM proposals WHERE author = ?`;
             db.all(sql, [user.username], (err, rows) => {
               if (err) reject(err);
               else resolve(rows);
             });
+            // final phase
           } else {
-            const sql = `SELECT * FROM proposals`;
+            const sql = `SELECT * FROM proposals ORDER BY score DESC, cost ASC`;
             db.all(sql, [], (err, rows) => {
               if (err) reject(err);
               else resolve(rows);

@@ -20,14 +20,14 @@ const getScore = async () => {
  * - id: number
  * - rating: number
  */
-const insertVote = async (id, rating) => {
+const insertVote = async (proposal, rating) => {
   return await fetch(SERVER_URL + "/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     credentials: "include",
-    body: JSON.stringify({ id, rating }),
+    body: JSON.stringify({ proposal, rating }),
   })
     .then(handleInvalidResponse)
     .then((response) => response.json());

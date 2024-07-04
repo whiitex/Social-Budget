@@ -4,7 +4,7 @@ import DigitalButtons from "../Utility/DigitalButtons";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import PhaseAPI from "../../API/phase.api.mjs";
 
-const Phase0 = ({ handleBudget, isAdmin }) => {
+const Phase0 = ({ handleBudget, isAdmin, setShouldRefresh }) => {
   const [newBudget, setNewBudget] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -16,6 +16,7 @@ const Phase0 = ({ handleBudget, isAdmin }) => {
       .then(() => {
         handleBudget(newBudget);
         setNewBudget(0);
+        setShouldRefresh(true);
       })
       .catch((err) => setErrorMessage(err.message));
   };
@@ -33,6 +34,7 @@ const Phase0 = ({ handleBudget, isAdmin }) => {
       e.target.parentElement.parentElement.parentElement.children[0].value =
         finalNumber;
       setNewBudget(finalNumber);
+      if (finalNumber <= 0) setErrorMessage("Budget must be a positive number");
     };
   };
 
@@ -42,6 +44,7 @@ const Phase0 = ({ handleBudget, isAdmin }) => {
       if (!parseInt(char) && char !== '.' && char !== ',' && parseInt(char) !== 0) flag = false;
     }
     if (!flag && e.target.value !== "") setErrorMessage("Budget must be a number");
+    else if (parseFloat(e.target.value) <= 0) setErrorMessage("Budget must be a positive number");
     else {
       setErrorMessage("");
       setNewBudget(parseFloat(e.target.value));

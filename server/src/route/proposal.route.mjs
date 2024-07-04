@@ -1,6 +1,8 @@
 "use strict";
 
 import express from "express";
+import validateRequest from "../utilities.mjs";
+import { body } from "express-validator";
 import ProposalController from "../controller/proposal.controller.mjs";
 
 class ProposalRoutes {
@@ -45,12 +47,21 @@ class ProposalRoutes {
      *  - description: string,
      *  - cost: number
      */
-    this.router.put("/", this.authenticator.isLoggedIn, (req, res, next) => {
-      this.proposalController
-        .insertProposal(req.user, req.body)
-        .then((proposal) => res.status(200).json(proposal))
-        .catch((err) => next(err));
-    });
+    this.router.put(
+      "/",
+      this.authenticator.isLoggedIn,
+      [
+        body("description").isString().default(""),
+        body("cost").isNumeric({ min: 0 }).default(0),
+        validateRequest,
+      ],
+      (req, res, next) => {
+        this.proposalController
+          .insertProposal(req.user, req.body)
+          .then((proposal) => res.status(200).json(proposal))
+          .catch((err) => next(err));
+      }
+    );
 
     /**
      * Edit a proposal
@@ -64,6 +75,13 @@ class ProposalRoutes {
     this.router.put(
       "/edit",
       this.authenticator.isLoggedIn,
+      [
+        body("id").exists().isNumeric({ min: 0 }),
+        body("description").isString().default(""),
+        body("cost").isNumeric({ min: 0 }).default(0),
+        body("is_approved").isBoolean().default(false),
+        validateRequest,
+      ],
       (req, res, next) => {
         this.proposalController
           .editProposal(req.user, req.body)
@@ -77,12 +95,11 @@ class ProposalRoutes {
      * It requires the user to be logged in.
      * The proposal is sent in the request body.
      *   - id: number
-     *   - author: string
-     *   - description: string
-     *   - cost: number
-     *   - is_approved: boolean
      */
-    this.router.delete("/", this.authenticator.isLoggedIn, (req, res, next) => {
+    this.router.delete("/", this.authenticator.isLoggedIn, [
+      body("id").exists().isInt(),
+      validateRequest,
+    ], (req, res, next) => {
       this.proposalController
         .removeProposal(req.body)
         .then((proposal) => res.status(200).json(proposal))

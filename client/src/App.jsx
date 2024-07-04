@@ -50,21 +50,20 @@ function App() {
 
   // get current user info, if cookies are set
   useEffect(() => {
+    setShouldRefresh(false);
+    
+    // get user and proposals according to the user log status
     AuthAPI.getUserInfo()
       .then((user) => {
-        setUser(user);
-        setIsAdmin(user.isadmin);
         if (user) {
+          setUser(user);
+          setIsAdmin(user.isadmin);
           ProposalAPI.getAllProposals()
-            .then((propos) => {
-              setProposals(propos);
-            })
+            .then((propos) => setProposals(propos))
             .catch((err) => console.error(err.message));
         } else {
           ProposalAPI.getApprovedProposals()
-            .then((propos) => {
-              setProposals(propos);
-            })
+            .then((propos) => setProposals(propos))
             .catch((err) => console.error(err.message));
         }
       })
@@ -72,12 +71,11 @@ function App() {
         setUser(null);
         setIsAdmin(false);
         ProposalAPI.getApprovedProposals()
-          .then((propos) => {
-            setProposals(propos);
-          })
+          .then((propos) => setProposals(propos))
           .catch((err) => console.error(err.message));
       });
 
+    // get phase and budget
     PhaseAPI.getPhase()
       .then((row) => {
         setPhase(row.phase);
@@ -104,7 +102,11 @@ function App() {
         {/* Phase 0 - Budget definition */}
         {phase === 0 ? (
           isAdmin ? (
-            <Phase0 handleBudget={handleBudget} isAdmin={isAdmin} />
+            <Phase0
+              handleBudget={handleBudget}
+              isAdmin={isAdmin}
+              setShouldRefresh={setShouldRefresh}
+            />
           ) : (
             <h3 className="text-center mt-5">
               Waiting for the admin to define the budget amount
@@ -113,7 +115,7 @@ function App() {
         ) : // Phase 1 - Proposal insertion
         phase === 1 ? (
           user ? (
-            <Phase1 user={user} budget={budget}/>
+            <Phase1 user={user} budget={budget} />
           ) : (
             <h3 className="text-center mt-5">
               Please login to insert a proposal

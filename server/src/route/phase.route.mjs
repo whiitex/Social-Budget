@@ -1,6 +1,8 @@
 "use strict";
 
 import express from "express";
+import validateRequest from "../utilities.mjs";
+import { body } from "express-validator";
 import PhaseController from "../controller/phase.controller.mjs";
 
 class PhaseRoutes {
@@ -34,12 +36,21 @@ class PhaseRoutes {
      *  - phase: string
      *  - budget: number
      */
-    this.router.put("/", this.authenticator.isAdmin, (req, res, next) => {
-      this.phaseController
-        .updatePhase(req.body.phase, req.body.budget || null)
-        .then((updated) => res.status(200).json(updated))
-        .catch((err) => next(err));
-    });
+    this.router.put(
+      "/",
+      this.authenticator.isAdmin,
+      [
+        body("phase").isInt(),
+        body("budget").optional().isDecimal({ gt: 0 }),
+        validateRequest,
+      ],
+      (req, res, next) => {
+        this.phaseController
+          .updatePhase(req.body.phase, req.body.budget || null)
+          .then((updated) => res.status(200).json(updated))
+          .catch((err) => next(err));
+      }
+    );
 
     /**
      * Reset all tables (proposals, state, votes)

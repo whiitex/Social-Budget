@@ -16,7 +16,7 @@ class ProposalController {
   }
 
   async insertProposal(user, proposal) {
-    this.dao.insertProposal(user, proposal);
+    return this.dao.insertProposal(user, proposal);
   }
 
   async editProposal(user, proposal) {

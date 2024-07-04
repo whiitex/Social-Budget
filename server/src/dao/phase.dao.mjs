@@ -12,7 +12,8 @@ class PhaseDAO {
       const sql = `SELECT * FROM state`;
       db.get(sql, [], (err, row) => {
         if (err) reject(err);
-        else if (!row) resolve({ error: "No phase found" });
+        // if no state in db, init state 0, budget 0I
+        else if (!row) resolve({ phase: 0, budget: 0 });
         else resolve(row);
       });
     });
@@ -75,10 +76,16 @@ class PhaseDAO {
         });
         // update the phase and the budget
       } else {
-        const sql = `UPDATE state SET phase = ?, budget = ?`;
-        db.run(sql, [phase, budget], (err) => {
+        const sqlDeleteAll = "DELETE FROM state";
+        db.run(sqlDeleteAll, [], (err) => {
           if (err) reject(err);
-          else resolve(true);
+          else {
+            const sql = `INSERT INTO state (phase, budget) VALUES (?, ?)  `;
+            db.run(sql, [phase, budget], (err) => {
+              if (err) reject(err);
+              else resolve(true);
+            });
+          }
         });
       }
     });
