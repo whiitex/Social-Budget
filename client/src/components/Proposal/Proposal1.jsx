@@ -22,8 +22,7 @@ const Proposal1 = ({
     const cost =
       e.target.parentElement.parentElement.children[1].innerText.split("$")[1];
 
-
-      ProposalAPI.removeProposal({ id: proposal.id })
+    ProposalAPI.removeProposal({ id: proposal.id })
       .then(() => {
         setShouldRefresh(true);
         // description update

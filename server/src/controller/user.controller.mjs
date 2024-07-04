@@ -4,7 +4,7 @@ import UserDAO from "../dao/user.dao.mjs";
 
 class UserController {
   constructor() {
-    this.dao = new UserDAO;
+    this.dao = new UserDAO();
   }
 
   async getUserByUsername(username) {

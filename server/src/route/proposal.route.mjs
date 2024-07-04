@@ -96,15 +96,17 @@ class ProposalRoutes {
      * The proposal is sent in the request body.
      *   - id: number
      */
-    this.router.delete("/", this.authenticator.isLoggedIn, [
-      body("id").exists().isInt(),
-      validateRequest,
-    ], (req, res, next) => {
-      this.proposalController
-        .removeProposal(req.body)
-        .then((proposal) => res.status(200).json(proposal))
-        .catch((err) => next(err));
-    });
+    this.router.delete(
+      "/",
+      this.authenticator.isLoggedIn,
+      [body("id").exists().isInt(), validateRequest],
+      (req, res, next) => {
+        this.proposalController
+          .removeProposal(req.body)
+          .then((proposal) => res.status(200).json(proposal))
+          .catch((err) => next(err));
+      }
+    );
 
     /**
      * Remove all proposals

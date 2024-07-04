@@ -41,10 +41,18 @@ const Phase0 = ({ handleBudget, isAdmin, setShouldRefresh }) => {
   const handleSetNewBudget = (e) => {
     let flag = true;
     for (const char of e.target.value) {
-      if (!parseInt(char) && char !== '.' && char !== ',' && parseInt(char) !== 0) flag = false;
+      if (
+        !parseInt(char) &&
+        char !== "." &&
+        char !== "," &&
+        parseInt(char) !== 0
+      )
+        flag = false;
     }
-    if (!flag && e.target.value !== "") setErrorMessage("Budget must be a number");
-    else if (parseFloat(e.target.value) <= 0) setErrorMessage("Budget must be a positive number");
+    if (!flag && e.target.value !== "")
+      setErrorMessage("Budget must be a number");
+    else if (parseFloat(e.target.value) <= 0)
+      setErrorMessage("Budget must be a positive number");
     else {
       setErrorMessage("");
       setNewBudget(parseFloat(e.target.value));

@@ -22,29 +22,30 @@ const Phase2 = ({ proposals, user }) => {
         <h3 className="text-center mt-5">No proposals...</h3>
       ) : (
         <>
-        <div id="preference" className="row mb-2">
+          <div id="preference" className="row mb-2">
             <h3 className="text-center mt-5">Vote proposals</h3>
           </div>
-        <div id="preference" className="row mb-5">
-          {proposals
-            .filter((proposal) => proposal.author !== user.username)
-            .map((proposal) => {
-              let vote = votes.filter(
-                (vote) => vote.proposal_id === proposal.id
-              );
-              if (vote.length === 0) vote = 0;
-              else vote = vote[0].score;
-              return (
-                <Proposal2
-                  key={proposal.id}
-                  proposal={proposal}
-                  votes={vote}
-                  mine={false}
-                  setShouldRefresh={setShouldRefresh}
-                />
-              );
-            })}
-        </div></>
+          <div id="preference" className="row mb-5">
+            {proposals
+              .filter((proposal) => proposal.author !== user.username)
+              .map((proposal) => {
+                let vote = votes.filter(
+                  (vote) => vote.proposal_id === proposal.id
+                );
+                if (vote.length === 0) vote = 0;
+                else vote = vote[0].score;
+                return (
+                  <Proposal2
+                    key={proposal.id}
+                    proposal={proposal}
+                    votes={vote}
+                    mine={false}
+                    setShouldRefresh={setShouldRefresh}
+                  />
+                );
+              })}
+          </div>
+        </>
       )}
       {proposals.filter((proposal) => proposal.author === user.username)
         .length === 0 ? (

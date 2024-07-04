@@ -30,7 +30,7 @@ const getUserInfo = async () => {
     credentials: "include",
   })
     .then(handleInvalidResponse)
-    .then((response) => response.json())
+    .then((response) => response.json());
 };
 
 /**

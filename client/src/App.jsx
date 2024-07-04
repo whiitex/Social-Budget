@@ -51,7 +51,7 @@ function App() {
   // get current user info, if cookies are set
   useEffect(() => {
     setShouldRefresh(false);
-    
+
     // get user and proposals according to the user log status
     AuthAPI.getUserInfo()
       .then((user) => {
