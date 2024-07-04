@@ -2,7 +2,14 @@ import React, { useState } from "react";
 import { Nav, Navbar, Button } from "react-bootstrap";
 import Login from "../Auth/Login";
 
-const Header = ({ isAdmin, user, phase, handleLogin, handleLogout, setShouldRefresh }) => {
+const Header = ({
+  isAdmin,
+  user,
+  phase,
+  handleLogin,
+  handleLogout,
+  setShouldRefresh,
+}) => {
   const [show, setShow] = useState(false);
 
   return (
@@ -10,7 +17,7 @@ const Header = ({ isAdmin, user, phase, handleLogin, handleLogout, setShouldRefr
       <Nav className="navbar-expand-lg navbar-dark bg-dark text-white py-3 fixed-top d-flex justify-content-between">
         <Navbar.Brand className="ml-5 mr-0">Social Budget 2024</Navbar.Brand>
 
-        {isAdmin && phase > 0  && phase !== 3 ? (
+        {isAdmin && phase > 0 && phase !== 3 ? (
           <Button type="button" id="adminButton">
             {">> next phase <<"}
           </Button>
@@ -45,7 +52,12 @@ const Header = ({ isAdmin, user, phase, handleLogin, handleLogout, setShouldRefr
         )}
       </Nav>
 
-      <Login show={show} setShow={setShow} handleLogin={handleLogin} setShouldRefresh={setShouldRefresh}/>
+      <Login
+        show={show}
+        setShow={setShow}
+        handleLogin={handleLogin}
+        setShouldRefresh={setShouldRefresh}
+      />
     </>
   );
 };

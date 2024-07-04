@@ -4,24 +4,19 @@ import ProposalDAO from "../dao/proposal.dao.mjs";
 
 class ProposalController {
   constructor() {
-    this.dao = new ProposalDAO;
+    this.dao = new ProposalDAO();
   }
 
   async getApprovedProposals() {
     return this.dao.getApprovedProposals();
   }
 
-  async getProposals() {
-    return this.dao.getProposals();
+  async getProposals(user) {
+    return this.dao.getProposals(user);
   }
 
   async insertProposal(user, proposal) {
-    return new Promise((resolve, reject) => {
-      this.dao.insertProposal(user, proposal)
-      .then(() => resolve(true))
-      .catch((err) => reject(err));
-    })
-    
+    this.dao.insertProposal(user, proposal);
   }
 
   async editProposal(user, proposal) {

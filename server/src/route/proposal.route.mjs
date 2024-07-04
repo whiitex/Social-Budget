@@ -33,7 +33,7 @@ class ProposalRoutes {
      */
     this.router.get("/", this.authenticator.isLoggedIn, (req, res, next) => {
       this.proposalController
-        .getProposals()
+        .getProposals(req.user)
         .then((proposals) => res.status(200).json(proposals))
         .catch((err) => next(err));
     });

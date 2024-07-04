@@ -19,14 +19,28 @@ class ProposalDAO {
 
   /**
    * Callable only by logged in users.
-   * @returns all proposals
+   * @returns all proposals if phase is 3, otherwise returns only the proposals of the user.
    */
-  async getProposals() {
+  async getProposals(user) {
     return new Promise((resolve, reject) => {
-      const sql = `SELECT * FROM proposals`;
-      db.all(sql, [], (err, rows) => {
+      const sqlPhase = `SELECT * FROM state`;
+      db.get(sqlPhase, [], (err, row) => {
         if (err) reject(err);
-        else resolve(rows);
+        else {
+          if (!row || row.phase !== 3) {
+            const sql = `SELECT * FROM proposals WHERE author = ?`;
+            db.all(sql, [user.username], (err, rows) => {
+              if (err) reject(err);
+              else resolve(rows);
+            });
+          } else {
+            const sql = `SELECT * FROM proposals`;
+            db.all(sql, [], (err, rows) => {
+              if (err) reject(err);
+              else resolve(rows);
+            });
+          }
+        }
       });
     });
   }
