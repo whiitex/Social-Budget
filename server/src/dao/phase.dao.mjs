@@ -31,7 +31,47 @@ class PhaseDAO {
         const sql = `UPDATE state SET phase = ?`;
         db.run(sql, [phase], (err) => {
           if (err) reject(err);
-          else resolve(true);
+          else if (phase !== 3) resolve(true);
+          // update the proposals according to the budget
+          else {
+            // get all proposals
+            const sqlPropScore = `SELECT id, cost, SUM(score) as totscore
+              FROM votes, proposals
+              WHERE votes.proposal_id = proposals.id
+              GROUP BY proposals.id`;
+            db.all(sqlPropScore, [], (err, rows) => {
+              if (err) reject(err);
+              else {
+                // sort proposals by score decreasing
+                let proposals = rows.sort((a, b) => b.totscore - a.totscore);
+                const sqlGetBudget = "SELECT * FROM state";
+                db.get(sqlGetBudget, [], (err, row) => {
+                  if (err) reject(err);
+                  else {
+                    // set to approved all proposals that fit the budget (cumulative sum)
+                    let budget = row.budget;
+                    let i = 0;
+                    while (budget > proposals[i].cost && i < proposals.length) {
+                      proposals[i].approved = true;
+                      budget -= proposals[i].cost;
+                      i++;
+                    }
+                    // update the proposals
+                    for (const proposal of proposals) {
+                      const sqlUpdate = `UPDATE proposals SET isapproved = ? WHERE id = ?`;
+                      db.run(
+                        sqlUpdate,
+                        [proposal.approved ? true : false, proposal.id],
+                        (err) => {
+                          if (err) reject(err);
+                        }
+                      );
+                    }
+                  }
+                });
+              }
+            });
+          }
         });
         // update the phase and the budget
       } else {
@@ -64,18 +104,16 @@ class PhaseDAO {
           })
         );
       }
-      // init state 0
-      promises.push(
-        new Promise((resolve, reject) => {
+
+      Promise.all(promises)
+        // init state 0
+        .then(() => {
           const sql = `INSERT INTO state (phase, budget) VALUES (0, 0)`;
           db.run(sql, [], (err) => {
             if (err) reject(err);
             else resolve(true);
           });
         })
-      );
-      Promise.all(promises)
-        .then(() => resolve(true))
         .catch((err) => reject(err));
     });
   }

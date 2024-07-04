@@ -8,6 +8,7 @@ import Phase2 from "./components/Phase/Phase2";
 import Phase3 from "./components/Phase/Phase3";
 import AuthAPI from "./API/auth.api.mjs";
 import ProposalAPI from "./API/proposal.api.mjs";
+import PhaseAPI from "./API/phase.api.mjs";
 import "./App.css";
 
 function App() {
@@ -30,7 +31,7 @@ function App() {
   };
 
   // state PHASE
-  const [phase, setPhase] = useState(1);
+  const [phase, setPhase] = useState(4);
   const phaseName = [
     "Phase 0 - Budget definition",
     "Phase 1 - Proposal insertion",
@@ -53,17 +54,37 @@ function App() {
       .then((user) => {
         setUser(user);
         setIsAdmin(user.isadmin);
-        if (!user) return;
-        ProposalAPI.getAllProposals()
+        if (user) {
+          ProposalAPI.getAllProposals()
+            .then((propos) => {
+              setProposals(propos);
+            })
+            .catch((err) => console.error(err.message));
+        } else {
+          ProposalAPI.getApprovedProposals()
+            .then((propos) => {
+              setProposals(propos);
+            })
+            .catch((err) => console.error(err.message));
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        setUser(null);
+        setIsAdmin(false);
+        ProposalAPI.getApprovedProposals()
           .then((propos) => {
             setProposals(propos);
           })
           .catch((err) => console.error(err.message));
-      })
-      .catch((err) => {
-        setUser(null);
-        setIsAdmin(false);
       });
+
+    PhaseAPI.getPhase()
+      .then((row) => {
+        setPhase(row.phase);
+        setBudget(row.budget);
+      })
+      .catch((err) => console.error(err.message));
   }, [shouldRefresh]);
 
   return (
@@ -77,8 +98,9 @@ function App() {
         setShouldRefresh={setShouldRefresh}
       />
 
-      <Container id="content" className="pt-5 mt-5 mb-5">
+      <Container id="content" className="mb-5">
         <h1 className="text-center">{phaseName[phase]}</h1>
+        {phase > 0 ? <h3 className="text-center">Budget: ${budget}</h3> : <></>}
 
         {/* Phase 0 - Budget definition */}
         {phase === 0 ? (
@@ -92,7 +114,7 @@ function App() {
         ) : // Phase 1 - Proposal insertion
         phase === 1 ? (
           user ? (
-            <Phase1 user={user} />
+            <Phase1 user={user} budget={budget}/>
           ) : (
             <h3 className="text-center mt-5">
               Please login to insert a proposal
@@ -112,9 +134,9 @@ function App() {
         ) : // Final phase - Decision announcement
         phase === 3 ? (
           proposals.length === 0 ? (
-            <h3 className="text-center mt-5">No proposals...</h3>
+            <h3 className="text-center mt-5">No approved proposals...</h3>
           ) : (
-            <Phase3 proposals={[]} budget={500} />
+            <Phase3 proposals={proposals} budget={budget} user={user} />
           )
         ) : (
           // Loading...

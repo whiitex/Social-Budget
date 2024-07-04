@@ -66,6 +66,7 @@ const Phase0 = ({ handleBudget, isAdmin }) => {
                   className="inputText"
                   placeholder="Enter value"
                   onChange={handleSetNewBudget}
+                  autoFocus
                 />
                 <DigitalButtons
                   margintop="mt-0"

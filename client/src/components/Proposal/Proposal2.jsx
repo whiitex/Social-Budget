@@ -75,6 +75,7 @@ const Proposal2 = ({ proposal, votes, setShouldRefresh, mine }) => {
                   id="description"
                   rows="3"
                   onChange={handleChangeVote}
+                  autoFocus
                 ></input>
               </Form.Group>
               <Button type="submit" className="btn-danger ml-3 mb-2">

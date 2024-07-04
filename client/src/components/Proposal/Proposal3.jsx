@@ -1,22 +1,22 @@
 import React from "react";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
-const Proposal3 = ({ isapproved, description, cost, score, author }) => {
+const Proposal3 = ({ proposal, order }) => {
   return (
     <div className="col-md-4 col-sm-6 col-6">
-      <div className={"box" + (isapproved ? " approved" : "")}>
+      <div className={"box" + (proposal.isapproved ? " approved" : "")}>
         <i className="bi bi-file-check verified-icon mr-2 mt-2"></i>
-        <h4># 1</h4>
-        <p className="box-description">{description}</p>
+        <h4># {order}</h4>
+        <p className="box-description">{proposal.description}</p>
         <p>
-          <strong>Cost:</strong> ${cost}
+          <strong>Cost:</strong> ${proposal.cost}
         </p>
         <p>
-          <strong>Score:</strong> {score}
+          <strong>Score:</strong> {proposal.score}
         </p>
-        {isapproved && (
+        {proposal.isapproved && (
           <p className="mb-1">
-            <strong>Author:</strong> {author}
+            <strong>Author:</strong> {proposal.author}
           </p>
         )}
       </div>

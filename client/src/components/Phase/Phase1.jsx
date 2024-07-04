@@ -5,7 +5,7 @@ import DigitalButtons from "../Utility/DigitalButtons";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import ProposalAPI from "../../API/proposal.api.mjs";
 
-const Phase1 = ({ user }) => {
+const Phase1 = ({ user, budget }) => {
   const [shouldRefresh, setShouldRefresh] = useState(false);
   const [proposals, setProposals] = useState([]);
   const [description, setDescription] = useState("");
@@ -24,6 +24,7 @@ const Phase1 = ({ user }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (errorMessage !== "") return;
     setErrorMessage("");
     const proposal = { description, cost };
     e.target.reset();
@@ -45,7 +46,8 @@ const Phase1 = ({ user }) => {
             .children[1].value
         ) || 0;
       const newNumber = prevNumber + (up ? 10 : -10);
-      const finalNumber = newNumber >= 0 ? newNumber : 0;
+      let finalNumber = newNumber >= 0 ? newNumber : 0;
+      if (finalNumber > budget) finalNumber = budget;
       e.target.parentElement.parentElement.parentElement.children[0].children[1].value =
         finalNumber;
       setCost(finalNumber);
@@ -67,6 +69,7 @@ const Phase1 = ({ user }) => {
       setErrorMessage("Cost must be a number");
     else {
       setErrorMessage("");
+      if (e.target.value > budget) setErrorMessage("Cost cannot exceed budget");
       setCost(parseFloat(e.target.value));
     }
   };
@@ -101,6 +104,7 @@ const Phase1 = ({ user }) => {
                   rows="3"
                   placeholder="Enter description"
                   onChange={(e) => setDescription(e.target.value)}
+                  autoFocus
                 ></textarea>
               </Form.Group>
               <Form.Group className="row">

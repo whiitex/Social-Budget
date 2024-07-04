@@ -9,7 +9,7 @@ class ProposalDAO {
    */
   async getApprovedProposals() {
     return new Promise((resolve, reject) => {
-      const sql = `SELECT * FROM proposals WHERE is_approved = 1`;
+      const sql = `SELECT * FROM proposals WHERE isapproved = 1`;
       db.all(sql, [], (err, rows) => {
         if (err) reject(err);
         else resolve(rows);

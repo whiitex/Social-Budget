@@ -10,9 +10,13 @@ const Header = ({ isAdmin, user, phase, handleLogin, handleLogout, setShouldRefr
       <Nav className="navbar-expand-lg navbar-dark bg-dark text-white py-3 fixed-top d-flex justify-content-between">
         <Navbar.Brand className="ml-5 mr-0">Social Budget 2024</Navbar.Brand>
 
-        {isAdmin && phase > 0 ? (
+        {isAdmin && phase > 0  && phase !== 3 ? (
           <Button type="button" id="adminButton">
             {">> next phase <<"}
+          </Button>
+        ) : isAdmin && phase === 3 ? (
+          <Button type="button" id="adminButton">
+            {">> reset <<"}
           </Button>
         ) : (
           <></>
