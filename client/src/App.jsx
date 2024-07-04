@@ -69,7 +69,6 @@ function App() {
         }
       })
       .catch((err) => {
-        console.log(err);
         setUser(null);
         setIsAdmin(false);
         ProposalAPI.getApprovedProposals()
