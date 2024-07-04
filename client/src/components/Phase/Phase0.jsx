@@ -18,7 +18,7 @@ const Phase0 = ({ handleBudget, isAdmin, setShouldRefresh }) => {
         setNewBudget(0);
         setShouldRefresh(true);
       })
-      .catch((err) => setErrorMessage(err.message));
+      .catch((err) => setErrorMessage(err.message ? err.message : err));
   };
 
   // handle DigitalButtons

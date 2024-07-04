@@ -33,7 +33,7 @@ const Proposal2 = ({ proposal, votes, setShouldRefresh, mine }) => {
 
     VoteAPI.insertVote(proposal, score || 0)
       .then(() => setShouldRefresh(true))
-      .catch((err) => setErrorMessage(err.message));
+      .catch((err) => setErrorMessage(err.message ? err.message : err));
   };
 
   return (

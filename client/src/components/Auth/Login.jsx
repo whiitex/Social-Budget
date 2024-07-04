@@ -20,9 +20,7 @@ const Login = ({ show, setShow, handleLogin, setShouldRefresh }) => {
         setShouldRefresh(true);
       })
       .catch((err) => {
-        if (err.message === "Unauthorized")
-          setErrorMessage("Invalid username and/or password");
-        else setErrorMessage(err.message);
+        setErrorMessage(err.message ? err.message : err);
         setShow(true);
       });
   };

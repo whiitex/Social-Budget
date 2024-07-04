@@ -13,7 +13,7 @@ const Proposal1 = ({
   const handleDelete = (e) => {
     ProposalAPI.removeProposal({ id: proposal.id })
       .then(() => setShouldRefresh(true))
-      .catch((err) => setErrorMessage(err.message));
+      .catch((err) => setErrorMessage(err.message ? err.message : err));
   };
 
   const handleEdit = (e) => {
@@ -35,7 +35,7 @@ const Proposal1 = ({
           cost;
         setCost(cost);
       })
-      .catch((err) => setErrorMessage(err.message));
+      .catch((err) => setErrorMessage(err.message ? err.message : err));
   };
 
   return (

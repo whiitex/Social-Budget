@@ -29,7 +29,7 @@ function initRoutes(app) {
   app.use(`${prefix}/phase`, phaseRouter.getRouter());
 
   app.use((err, req, res, next) => {
-    return res.status(306).json({ message: err.message });
+    return res.status(306).json({ message: err.message ? err.message : err });
   });
 }
 

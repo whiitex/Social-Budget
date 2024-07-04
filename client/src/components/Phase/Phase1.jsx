@@ -19,7 +19,7 @@ const Phase1 = ({ user, budget }) => {
         setErrorMessage("");
         setProposals(propos.filter((p) => p.author === user.username));
       })
-      .catch((err) => setErrorMessage(err.message));
+      .catch((err) => setErrorMessage(err.message ? err.message : err));
   }, [user, shouldRefresh]);
 
   const handleSubmit = (e) => {
@@ -33,7 +33,7 @@ const Phase1 = ({ user, budget }) => {
 
     ProposalAPI.insertProposal(proposal)
       .then(() => setShouldRefresh(true))
-      .catch((err) => setErrorMessage(err.message));
+      .catch((err) => setErrorMessage(err.message ? err.message : err));
   };
 
   // handle DigitalButtons

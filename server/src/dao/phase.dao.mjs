@@ -55,8 +55,6 @@ class PhaseDAO {
                     // set to approved all proposals that fit the budget (cumulative sum)
                     let budget = row.budget;
                     let i = 0;
-                    console.log("proposals", proposals);
-                    console.log("budget", budget);
                     while (
                       i < proposals.length &&
                       budget >= proposals[i].cost
