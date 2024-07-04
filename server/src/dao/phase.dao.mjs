@@ -36,7 +36,7 @@ class PhaseDAO {
           // update the proposals according to the budget
           else {
             // get all proposals
-            const sqlPropScore = `SELECT id, cost, SUM(score) as totscore
+            const sqlPropScore = `SELECT proposals.id, cost, SUM(votes.score) as totscore
               FROM votes, proposals
               WHERE votes.proposal_id = proposals.id
               GROUP BY proposals.id`;
@@ -44,7 +44,10 @@ class PhaseDAO {
               if (err) reject(err);
               else {
                 // sort proposals by score decreasing
-                let proposals = rows.sort((a, b) => b.totscore - a.totscore);
+                let proposals = rows.sort((a, b) => {
+                  if (a.totscore !== b.totscore) return b.totscore - a.totscore;
+                  else return a.cost - b.cost;
+                });
                 const sqlGetBudget = "SELECT * FROM state";
                 db.get(sqlGetBudget, [], (err, row) => {
                   if (err) reject(err);
@@ -52,19 +55,30 @@ class PhaseDAO {
                     // set to approved all proposals that fit the budget (cumulative sum)
                     let budget = row.budget;
                     let i = 0;
-                    while (budget > proposals[i].cost && i < proposals.length) {
+                    console.log("proposals", proposals);
+                    console.log("budget", budget);
+                    while (
+                      i < proposals.length &&
+                      budget >= proposals[i].cost
+                    ) {
                       proposals[i].approved = true;
                       budget -= proposals[i].cost;
                       i++;
                     }
+
                     // update the proposals
                     for (const proposal of proposals) {
-                      const sqlUpdate = `UPDATE proposals SET isapproved = ? WHERE id = ?`;
+                      const sqlUpdate = `UPDATE proposals SET isapproved = ?, score = ? WHERE id = ?`;
                       db.run(
                         sqlUpdate,
-                        [proposal.approved ? true : false, proposal.id],
+                        [
+                          proposal.approved ? true : false,
+                          proposal.totscore,
+                          proposal.id,
+                        ],
                         (err) => {
                           if (err) reject(err);
+                          else resolve(true);
                         }
                       );
                     }

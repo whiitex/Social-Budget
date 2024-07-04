@@ -28,7 +28,7 @@ class ProposalDAO {
         if (err) reject(err);
         else {
           // not the final phase
-          if (!row || row.phase !== 3) {
+          if (!row || row.phase < 2) {
             const sql = `SELECT * FROM proposals WHERE author = ?`;
             db.all(sql, [user.username], (err, rows) => {
               if (err) reject(err);

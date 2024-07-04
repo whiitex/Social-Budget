@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Nav, Navbar, Button } from "react-bootstrap";
+import PhaseAPI from "../../API/phase.api.mjs";
 import Login from "../Auth/Login";
 
 const Header = ({
@@ -12,17 +13,35 @@ const Header = ({
 }) => {
   const [show, setShow] = useState(false);
 
+  const handleNextPhaseButton = () => {
+    // get to next phase
+    PhaseAPI.updatePhase(phase + 1)
+      .then(() => setShouldRefresh(true))
+      .catch((err) => console.error(err.message));
+  };
+
+  const handleResetButton = () => {
+    // reset all
+    PhaseAPI.resetAll()
+      .then(() => setShouldRefresh(true))
+      .catch((err) => console.error(err.message));
+  };
+
   return (
     <>
       <Nav className="navbar-expand-lg navbar-dark bg-dark text-white py-3 fixed-top d-flex justify-content-between">
         <Navbar.Brand className="ml-5 mr-0">Social Budget 2024</Navbar.Brand>
 
         {isAdmin && phase > 0 && phase !== 3 ? (
-          <Button type="button" id="adminButton">
+          <Button
+            onClick={handleNextPhaseButton}
+            type="button"
+            id="adminButton"
+          >
             {">> next phase <<"}
           </Button>
         ) : isAdmin && phase === 3 ? (
-          <Button type="button" id="adminButton">
+          <Button onClick={handleResetButton} type="button" id="adminButton">
             {">> reset <<"}
           </Button>
         ) : (

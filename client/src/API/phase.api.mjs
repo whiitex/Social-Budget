@@ -28,7 +28,7 @@ const updatePhase = async (phase, budget = null) => {
       "Content-Type": "application/json",
     },
     credentials: "include",
-    body: JSON.stringify({ phase, budget }),
+    body: JSON.stringify({ phase, budget: budget ? budget : 0 }),
   })
     .then(handleInvalidResponse)
     .then((response) => response.json());
