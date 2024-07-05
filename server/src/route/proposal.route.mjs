@@ -51,7 +51,7 @@ class ProposalRoutes {
       "/",
       this.authenticator.isLoggedIn,
       [
-        body("description").isString().default(""),
+        body("description").isString().isLength({ max: 90 }),
         body("cost").isNumeric({ min: 0 }).default(0),
         validateRequest,
       ],

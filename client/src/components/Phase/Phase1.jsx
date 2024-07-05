@@ -10,6 +10,8 @@ const Phase1 = ({ user, budget }) => {
   const [proposals, setProposals] = useState([]);
   const [description, setDescription] = useState("");
   const [cost, setCost] = useState(0);
+  const [errorDescMessage, setErrorDescMessage] = useState("");
+  const [errorCostMessage, setErrorCostMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
@@ -24,8 +26,11 @@ const Phase1 = ({ user, budget }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (errorMessage !== "") return;
+
+    // check for errors
+    if (errorDescMessage !== "" || errorCostMessage !== "") return;
     setErrorMessage("");
+
     const proposal = { description, cost };
     e.target.reset();
     setDescription("");
@@ -39,7 +44,7 @@ const Phase1 = ({ user, budget }) => {
   // handle DigitalButtons
   const onClickButton = (up) => {
     return (e) => {
-      setErrorMessage("");
+      setErrorCostMessage("");
       const prevNumber =
         parseFloat(
           e.target.parentElement.parentElement.parentElement.children[0]
@@ -54,6 +59,13 @@ const Phase1 = ({ user, budget }) => {
     };
   };
 
+  const handleSetDescription = (e) => {
+    setDescription(e.target.value);
+    if (description.length > 90)
+      setErrorDescMessage("Description cannot exceed 90 characters");
+    else setErrorDescMessage("");
+  };
+
   const handleSetCost = (e) => {
     let flag = true;
     for (const char of e.target.value) {
@@ -66,10 +78,11 @@ const Phase1 = ({ user, budget }) => {
         flag = false;
     }
     if (!flag && e.target.value !== "")
-      setErrorMessage("Cost must be a number");
+      setErrorCostMessage("Cost must be a number");
     else {
-      setErrorMessage("");
-      if (e.target.value > budget) setErrorMessage("Cost cannot exceed budget");
+      setErrorCostMessage("");
+      if (e.target.value > budget)
+        setErrorCostMessage("Cost cannot exceed budget");
       setCost(parseFloat(e.target.value));
     }
   };
@@ -103,7 +116,7 @@ const Phase1 = ({ user, budget }) => {
                   id="description"
                   rows="3"
                   placeholder="Enter description"
-                  onChange={(e) => setDescription(e.target.value)}
+                  onChange={handleSetDescription}
                   autoFocus
                 ></textarea>
               </Form.Group>
@@ -128,7 +141,9 @@ const Phase1 = ({ user, budget }) => {
                 </div>
               </Form.Group>
               <Form.Group className="mb-3">
-                <p style={{ color: "red" }}>{errorMessage}</p>
+                <p style={{ color: "red" }}>
+                  {errorMessage || errorCostMessage || errorDescMessage}
+                </p>
               </Form.Group>
               <Button type="submit" className="btn-primary">
                 Submit
