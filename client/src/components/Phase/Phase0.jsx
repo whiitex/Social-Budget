@@ -4,7 +4,7 @@ import DigitalButtons from "../Utility/DigitalButtons";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import PhaseAPI from "../../API/phase.api.mjs";
 
-const Phase0 = ({ handleBudget, isAdmin, setShouldRefresh }) => {
+const Phase0 = ({ handleBudget, setShouldRefresh, socket }) => {
   const [newBudget, setNewBudget] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -14,6 +14,7 @@ const Phase0 = ({ handleBudget, isAdmin, setShouldRefresh }) => {
     e.target.reset();
     PhaseAPI.updatePhase(1, newBudget)
       .then(() => {
+        socket.emit("phase", 1);
         handleBudget(newBudget);
         setNewBudget(0);
         setShouldRefresh(true);

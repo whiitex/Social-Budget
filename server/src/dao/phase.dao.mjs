@@ -37,11 +37,12 @@ class PhaseDAO {
           else {
             // get all proposals
             const sqlPropScore = `SELECT proposals.id, cost, SUM(votes.score) as totscore
-              FROM votes, proposals
-              WHERE votes.proposal_id = proposals.id
+              FROM proposals LEFT JOIN votes 
+              ON votes.proposal_id = proposals.id
               GROUP BY proposals.id`;
             db.all(sqlPropScore, [], (err, rows) => {
               if (err) reject(err);
+              else if (rows.length === 0) resolve(true);
               else {
                 // sort proposals by score decreasing
                 let proposals = rows.sort((a, b) => {
@@ -57,7 +58,8 @@ class PhaseDAO {
                     let i = 0;
                     while (
                       i < proposals.length &&
-                      budget >= proposals[i].cost
+                      budget >= proposals[i].cost &&
+                      proposals[i].totscore
                     ) {
                       proposals[i].approved = true;
                       budget -= proposals[i].cost;

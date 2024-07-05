@@ -1,3 +1,5 @@
+"use strict";
+
 export default async function handleInvalidResponse(response) {
   if (!response.ok) {
     throw await response.json();

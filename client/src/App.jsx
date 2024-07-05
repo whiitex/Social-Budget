@@ -9,6 +9,7 @@ import Phase3 from "./components/Phase/Phase3";
 import AuthAPI from "./API/auth.api.mjs";
 import ProposalAPI from "./API/proposal.api.mjs";
 import PhaseAPI from "./API/phase.api.mjs";
+import socket from "./socket";
 import "./App.css";
 
 function App() {
@@ -37,7 +38,7 @@ function App() {
     "Phase 1 - Proposal insertion",
     "Phase 2 - Preference assignment",
     "Final phase - Decision announcement",
-    "Loading...",
+    "Loading",
   ];
 
   // state BUDGET
@@ -82,6 +83,13 @@ function App() {
         setBudget(row.budget);
       })
       .catch((err) => console.error(err.message));
+
+    // SOCKET implementation
+    socket.on("phase", (p) => {
+      setShouldRefresh(true);
+      setPhase(p);
+    });
+    return () => socket.off("phase");
   }, [shouldRefresh]);
 
   return (
@@ -93,18 +101,23 @@ function App() {
         handleLogin={handleLogin}
         handleLogout={handleLogout}
         setShouldRefresh={setShouldRefresh}
+        socket={socket}
       />
 
       <Container id="content" className="mb-5">
         <h1 className="text-center">{phaseName[phase]}</h1>
-        {phase > 0 ? <h3 className="text-center">Budget: ${budget}</h3> : <></>}
+        {phase > 0 && phase !== 4 ? (
+          <h3 className="text-center">Budget: ${budget}</h3>
+        ) : (
+          <></>
+        )}
 
         {/* Phase 0 - Budget definition */}
         {phase === 0 ? (
           isAdmin ? (
             <Phase0
               handleBudget={handleBudget}
-              isAdmin={isAdmin}
+              socket={socket}
               setShouldRefresh={setShouldRefresh}
             />
           ) : (
@@ -141,8 +154,8 @@ function App() {
           )
         ) : (
           // Loading...
-          <div className="text-center">
-            <h2>Please wait...</h2>
+          <div className="text-center mt-5">
+            <h3>Please wait... </h3>
           </div>
         )}
       </Container>

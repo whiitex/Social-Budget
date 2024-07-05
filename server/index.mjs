@@ -1,6 +1,7 @@
 "use strict";
 
 import express from "express";
+import { Server } from "socket.io";
 import cors from "cors";
 import initRoutes from "./src/routes.mjs";
 
@@ -15,10 +16,6 @@ app.use(
       "http://localhost:5174",
       "http://localhost:5175",
       "http://localhost:5176",
-      "http://localhost:5177",
-      "http://localhost:5178",
-      "http://localhost:5179",
-      "http://localhost:5180",
     ],
     credentials: true,
   })
@@ -27,9 +24,29 @@ app.use(
 initRoutes(app);
 
 // activate the server
-const port = 3001;
-app.listen(port, () => {
-  console.log(`Server listening at http://localhost:${port}`);
+const PORT = 3001;
+
+const listenCallback = () => {
+  console.log(`Server listening at http://localhost:${PORT}`);
+};
+
+const io = new Server(app.listen(PORT, listenCallback), {
+  cors: {
+    origin: "*",
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log("A user connected");
+
+  socket.on("phase", (phase) => {
+    console.log("Phase from admin: ", phase);
+    io.emit("phase", phase);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("A user disconnected");
+  });
 });
 
 export default app;

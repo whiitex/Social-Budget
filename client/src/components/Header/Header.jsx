@@ -10,20 +10,27 @@ const Header = ({
   handleLogin,
   handleLogout,
   setShouldRefresh,
+  socket,
 }) => {
   const [show, setShow] = useState(false);
 
   const handleNextPhaseButton = () => {
     // get to next phase
     PhaseAPI.updatePhase(phase + 1)
-      .then(() => setShouldRefresh(true))
+      .then(() => {
+        socket.emit("phase", phase + 1);
+        setShouldRefresh(true);
+      })
       .catch((err) => console.error(err.message));
   };
 
   const handleResetButton = () => {
     // reset all
     PhaseAPI.resetAll()
-      .then(() => setShouldRefresh(true))
+      .then(() => {
+        socket.emit("phase", 0);
+        setShouldRefresh(true);
+      })
       .catch((err) => console.error(err.message));
   };
 

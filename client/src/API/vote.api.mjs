@@ -1,3 +1,5 @@
+"use strict";
+
 import handleInvalidResponse from "./utils.mjs";
 
 const SERVER_URL = "http://localhost:3001/socialbudget/api/votes";
