@@ -27,7 +27,7 @@ const Phase1 = ({ budget, setShouldRefresh, proposals }) => {
     ProposalAPI.insertProposal(proposal)
       .then(() => setShouldRefresh(true))
       .catch((err) => {
-        if (err.message === "Not in phase 1") {console.log("AAAAAAAA");setShouldRefresh(true);}
+        if (err.message === "Not in phase 1") setShouldRefresh(true);
         else setErrorMessage(err.message ? err.message : err);
       });
   };

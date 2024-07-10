@@ -40,7 +40,10 @@ const insertProposal = async (proposal) => {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({...proposal, cost: (proposal.cost ? proposal.cost : 0)}),
+    body: JSON.stringify({
+      ...proposal,
+      cost: proposal.cost ? proposal.cost : 0,
+    }),
   });
   if (!response.ok) {
     const error = await response.json();
