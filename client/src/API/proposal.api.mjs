@@ -2,7 +2,7 @@
 
 import handleInvalidResponse from "./utils.mjs";
 
-const SERVER_URL = "http://localhost:3001/socialbudget/api/proposals";
+const SERVER_URL = "http://localhost:3001/api/proposals";
 
 /**
  * Get all approved proposals

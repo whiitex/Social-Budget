@@ -2,7 +2,7 @@
 
 import handleInvalidResponse from "./utils.mjs";
 
-const SERVER_URL = "http://localhost:3001/socialbudget/api/phase";
+const SERVER_URL = "http://localhost:3001/api/phase";
 
 /**
  * Get the current phase

@@ -7,7 +7,7 @@ import ProposalRoutes from "./route/proposal.route.mjs";
 import VoteRoutes from "./route/vote.route.mjs";
 import PhaseRoutes from "./route/phase.route.mjs";
 
-const prefix = "/socialbudget/api";
+const prefix = "/api";
 
 /**
  * Initializes the routes for the application.

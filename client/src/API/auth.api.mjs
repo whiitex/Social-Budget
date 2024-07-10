@@ -2,7 +2,7 @@
 
 import handleInvalidResponse from "./utils.mjs";
 
-const SERVER_URL = "http://localhost:3001/socialbudget/api/sessions";
+const SERVER_URL = "http://localhost:3001/api/sessions";
 
 /**
  * Log in the user - if credentials are correct
