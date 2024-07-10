@@ -5,24 +5,12 @@ import DigitalButtons from "../Utility/DigitalButtons";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import ProposalAPI from "../../API/proposal.api.mjs";
 
-const Phase1 = ({ user, budget }) => {
-  const [shouldRefresh, setShouldRefresh] = useState(false);
-  const [proposals, setProposals] = useState([]);
+const Phase1 = ({ budget, setShouldRefresh, proposals }) => {
   const [description, setDescription] = useState("");
   const [cost, setCost] = useState(0);
   const [errorDescMessage, setErrorDescMessage] = useState("");
   const [errorCostMessage, setErrorCostMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-
-  useEffect(() => {
-    setShouldRefresh(false);
-    ProposalAPI.getAllProposals()
-      .then((propos) => {
-        setErrorMessage("");
-        setProposals(propos.filter((p) => p.author === user.username));
-      })
-      .catch((err) => setErrorMessage(err.message ? err.message : err));
-  }, [user, shouldRefresh]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -38,7 +26,10 @@ const Phase1 = ({ user, budget }) => {
 
     ProposalAPI.insertProposal(proposal)
       .then(() => setShouldRefresh(true))
-      .catch((err) => setErrorMessage(err.message ? err.message : err));
+      .catch((err) => {
+        if (err.message === "Not in phase 1") {console.log("AAAAAAAA");setShouldRefresh(true);}
+        else setErrorMessage(err.message ? err.message : err);
+      });
   };
 
   // handle DigitalButtons

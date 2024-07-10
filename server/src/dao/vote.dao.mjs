@@ -1,6 +1,7 @@
 "use strict";
 
 import db from "../db/db.mjs";
+import GP from "./utils.dao.mjs";
 
 class VoteDAO {
   /**
@@ -23,33 +24,38 @@ class VoteDAO {
    * @returns
    */
   async insertScore(user, proposal, rating) {
-    return new Promise((resolve, reject) => {
-      // checks if the user is the same of the proposal author
-      if (user.username === proposal.author)
-        reject(new Error("User cannot vote for his own proposal"));
-      // user is not the author of the proposal
+    return new Promise(async (resolve, reject) => {
+      // check if it is the second phase
+      const phase = await GP();
+      if (phase.phase !== 2) reject(new Error("Not in phase 2"));
       else {
-        // checks if the user has already voted for the proposal
-        const sqlCheck = `SELECT * FROM votes WHERE proposal_id = ? AND voter = ?`;
-        db.get(sqlCheck, [proposal.id, user.username], (err, row) => {
-          if (err) reject(err);
-          // update the vote of the user
-          else if (row) {
-            const sql = `UPDATE votes SET score = ? WHERE proposal_id = ? AND voter = ?`;
-            db.run(sql, [rating, proposal.id, user.username], (err) => {
-              if (err) reject(err);
-              else resolve(true);
-            });
-          }
-          // insert a new vote
-          else {
-            const sql = `INSERT INTO votes (proposal_id, voter, score) VALUES (?, ?, ?)`;
-            db.run(sql, [proposal.id, user.username, rating], (err) => {
-              if (err) reject(err);
-              else resolve(true);
-            });
-          }
-        });
+        // checks if the user is the same of the proposal author
+        if (user.username === proposal.author)
+          reject(new Error("User cannot vote for his own proposal"));
+        // user is not the author of the proposal
+        else {
+          // checks if the user has already voted for the proposal
+          const sqlCheck = `SELECT * FROM votes WHERE proposal_id = ? AND voter = ?`;
+          db.get(sqlCheck, [proposal.id, user.username], (err, row) => {
+            if (err) reject(err);
+            // update the vote of the user
+            else if (row) {
+              const sql = `UPDATE votes SET score = ? WHERE proposal_id = ? AND voter = ?`;
+              db.run(sql, [rating, proposal.id, user.username], (err) => {
+                if (err) reject(err);
+                else resolve(true);
+              });
+            }
+            // insert a new vote
+            else {
+              const sql = `INSERT INTO votes (proposal_id, voter, score) VALUES (?, ?, ?)`;
+              db.run(sql, [proposal.id, user.username, rating], (err) => {
+                if (err) reject(err);
+                else resolve(true);
+              });
+            }
+          });
+        }
       }
     });
   }
@@ -59,12 +65,17 @@ class VoteDAO {
    * @param proposal
    */
   async removeScore(user, proposal) {
-    return new Promise((resolve, reject) => {
-      const sql = `DELETE FROM votes WHERE proposal_id = ? AND voter = ?`;
-      db.run(sql, [proposal.id, user.username], (err) => {
-        if (err) reject(err);
-        else resolve(true);
-      });
+    return new Promise(async (resolve, reject) => {
+      // check if it is the second phase
+      const phase = await GP();
+      if (phase.phase !== 2) reject(new Error("Not in phase 2"));
+      else {
+        const sql = `DELETE FROM votes WHERE proposal_id = ? AND voter = ?`;
+        db.run(sql, [proposal.id, user.username], (err) => {
+          if (err) reject(err);
+          else resolve(true);
+        });
+      }
     });
   }
 }

@@ -47,6 +47,7 @@ function App() {
     setBudget(b);
   };
 
+  // state PROPOSALS
   const [proposals, setProposals] = useState([]);
 
   // get current user info, if cookies are set
@@ -128,7 +129,11 @@ function App() {
         ) : // Phase 1 - Proposal insertion
         phase === 1 ? (
           user ? (
-            <Phase1 user={user} budget={budget} />
+            <Phase1
+              budget={budget}
+              setShouldRefresh={setShouldRefresh}
+              proposals={proposals}
+            />
           ) : (
             <h3 className="text-center mt-5">
               Please login to insert a proposal

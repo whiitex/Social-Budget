@@ -1,6 +1,7 @@
 "use strict";
 
 import db from "../db/db.mjs";
+import GP from "./utils.dao.mjs";
 
 class PhaseDAO {
   /**
@@ -8,15 +9,7 @@ class PhaseDAO {
    * @returns the current phase
    */
   async getPhase() {
-    return new Promise((resolve, reject) => {
-      const sql = `SELECT * FROM state`;
-      db.get(sql, [], (err, row) => {
-        if (err) reject(err);
-        // if no state in db, init state 0, budget 0I
-        else if (!row) resolve({ phase: 0, budget: 0 });
-        else resolve(row);
-      });
-    });
+    return GP();
   }
 
   /**
