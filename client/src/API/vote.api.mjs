@@ -10,6 +10,7 @@ const SERVER_URL = "http://localhost:3001/api/votes";
 const getScore = async () => {
   return await fetch(SERVER_URL + "/", {
     method: "GET",
+    credentials: "include",
   })
     .then(handleInvalidResponse)
     .then((response) => response.json());

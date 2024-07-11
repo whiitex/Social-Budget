@@ -21,7 +21,7 @@ class VoteRoutes {
     /**
      * Get the score of all proposals
      */
-    this.router.get("/", (req, res, next) => {
+    this.router.get("/", this.authenticator.isLoggedIn, (req, res, next) => {
       this.voteController
         .getScore()
         .then((score) => res.status(200).json(score))

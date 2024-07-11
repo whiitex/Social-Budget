@@ -70,7 +70,6 @@ class ProposalRoutes {
      *  - id: number
      *  - description: string,
      *  - cost: number
-     *  - is_approved: boolean
      */
     this.router.put(
       "/edit",

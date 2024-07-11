@@ -33,19 +33,353 @@
 
 ## API Server
 
-- POST `/api/something`: purpose
-  - request parameters and request body content
-  - response body content
-  - response status codes and possible errors
-- GET `/api/something`: purpose
-  - request parameters
-  - response body content
-  - response status codes and possible errors
-- PUT `/api/something`: purpose
-  - request parameters and request body content
-  - response body content
-  - response status codes and possible errors
-- ...
+### Authentication
+
+- **POST** `/api/sessions`: login
+
+  - body content:
+    ```mjs
+    {
+      username: "username";
+      password: "password";
+    }
+    ```
+  - response body:
+    ```mjs
+    {
+      username: "User username ";
+      email: "User email";
+      name: "User name";
+      surname: "User surname";
+      isadmin: true || false;
+    }
+    ```
+  - response status code
+    - `200 OK`: user correctly logged in
+    - `401 Unauthorized`: wrong credentials
+    - `500 Error`: if some error occurs
+
+
+- **GET** `api/sessions/current`: get user informations
+
+  - body content: _None_
+  - response body:
+    ```mjs
+    {
+      username: "User username ";
+      email: "User email";
+      name: "User name";
+      surname: "User surname";
+      isadmin: true || false;
+    }
+    ```
+  - response status code
+    - `200 OK`: user is logged
+    - `401 Unauthorized`: user not logged
+
+- **DELETE** `api/sessions/current`: logout current user
+  - body content: _None_
+  - response body: _None_
+  - response status code:
+    - `200 OK`: user is logged
+    - `401 Unauthorized`: user not logged
+    - `500 Error`: if some error occurs
+
+### Proposals
+
+- **GET** `api/proposals/approved`: returns only approved proposals
+
+  - constraint: _None_
+  - body content: _None_
+  - response body:
+    ```mjs
+    [
+      {
+        id: 'Proposal id'
+        author: 'Proposal author'
+        description: 'Proposal description'
+        cost: 'Proposal cost' // number
+        score: 'Proposal final score' // number
+        isapproved: true
+      }
+    ]
+    ```
+  - response status code:
+    - `200 OK`: all good
+    - `500 Error`: if some error occurs
+
+- **GET** `api/proposals/`: returns all proposals if phase is 2 or 3, otherwise only logged user authored proposals
+
+  - constraint: logged user
+  - body content: _None_
+  - response body:
+    ```mjs
+    [
+      {
+        id: 'Proposal id'
+        author: 'Proposal author' // user.username
+        description: 'Proposal description'
+        cost: 'Proposal cost' // number
+        score: 'Proposal final score' // number
+        isapproved: true || false
+      }
+    ]
+    ```
+  - response status code:
+    - `200 OK`: all good
+    - `401 Unauthorized`: user not logged
+    - `500 Error`: if some error occurs
+
+- **PUT** `api/proposals/`: insert a new proposal in db
+
+  - constraint: logged user, cost min: 0
+  - body content:
+    ```mjs
+    {
+      description: "Proposal description";
+      cost: "Proposal cost"; // number
+    }
+    ```
+  - response body:
+    ```mjs
+    {
+      response: true;
+    }
+    ```
+  - response status code:
+    - `200 OK`: all good
+    - `306`:
+      ```mjs
+      {
+        message: "You have already submitted 3 proposals";
+      }
+      ```
+    - `306`:
+      ```mjs
+      {
+        message: "Not in phase 1";
+      }
+      ```    - `401 Unauthorized`: user not logged
+    - `500 Error`: if some error occurs
+
+- **PUT** `api/proposals/edit`: edit an own proposal in db
+
+  - constraint: logged user, cost min: 0
+  - body content:
+    ```mjs
+    {
+      id: "Proposal id";
+      description: "Proposal description";
+      cost: "Proposal cost"; // number
+    }
+    ```
+  - response body:
+    ```mjs
+    {
+      response: true;
+    }
+    ```
+  - response status code:
+    - `200 OK`: all good
+    - `401 Unauthorized`: user not logged
+    - `306`:
+      ```mjs
+      {
+        message: "User cannot edit another user's proposal";
+      }
+      ```
+    - `306`:
+      ```mjs
+      {
+        message: "Not in phase 1";
+      }
+      ```
+    - `404 Not Found`: if the given id is not found
+    - `500 Error`: if some error occurs
+
+- **DELETE** `api/proposals/`: delete a proposal in db
+
+  - constraint: logged user
+  - body content:
+    ```mjs
+    {
+      id: "Proposal id";
+    }
+    ```
+  - response body:
+    ```mjs
+    {
+      response: true;
+    }
+    ```
+  - response status code:
+    - `200 OK`: all good
+    - `306`:
+      ```mjs
+      {
+        message: "Not in phase 1";
+      }
+      ```
+    - `401 Unauthorized`: user not logged
+    - `404 Not Found`: if the given id is not found
+    - `500 Error`: if some error occurs
+
+- **DELETE** `api/proposals/all`: delete all proposals in db
+  - constraint: logged admin
+  - body content: _None_
+  - response body:
+    ```mjs
+    {
+      response: true;
+    }
+    ```
+  - response status code:
+    - `200 OK`: all good
+    - `401 Unauthorized`: user not admin
+    - `500 Error`: if some error occurs
+
+### Votes
+
+- **GET** `api/votes/`: returns all votes of the logged user
+
+  - constraint: logged user
+  - body content: _None_
+  - response body:
+    ```mjs
+    [
+      {
+        id: 'Vote id'
+        proposal_id: 'Proposal id'
+        voter: 'User username'
+        score: 'Vote score' // number in [0, 3]
+      }
+    ]
+    ```
+  - response status code:
+    - `200 OK`: all good
+    - `401 Unauthorized`: user not logged
+    - `500 Error`: if some error occurs
+
+- **POST** `api/votes/`: insert a score in db
+
+  - constraint: logged user
+  - body content:
+
+  ```mjs
+  {
+    proposal: 'Proposal id',
+    rating: 'Proposal score' // number in [0, 3]
+  }
+  ```
+
+  - response body:
+    ```mjs
+    {
+      true;
+    }
+    ```
+  - response status code:
+    - `200 OK`: all good
+    - `306`:
+      ```mjs
+      {
+        message: "Not in phase 2";
+      }
+      ```
+    - `306`:
+      ```mjs
+      {
+        message: "User cannot vote for his own proposal";
+      }
+      ```
+    - `401 Unauthorized`: user logged
+    - `500 Error`: if some error occurs
+
+
+- **DELETE** `api/votes/`: delete a vote in db
+
+  - constraint: logged user
+  - body content:
+  ```mjs
+  {
+    proposal: 'Proposal id',
+  }
+  ```
+  - response body:
+    ```mjs
+    {
+      true;
+    }
+    ```
+  - response status code:
+    - `200 OK`: all good
+    - `306`:
+      ```mjs
+      {
+        message: "Not in phase 2";
+      }
+      ```
+    - `401 Unauthorized`: user not logged
+    - `500 Error`: if some error occurs
+
+### Phase
+
+- **GET** `api/phase/`: get the current phase
+
+  - constraint: _None_
+  - body content: _None_
+  - response body:
+    ```mjs
+    {
+      id: 'Phase id',
+      phase: 'Phase number', // number
+      budget: 'Phase budget' // number
+    }
+    ```
+  - response status code:
+    - `200 OK`: all good
+    - `500 Error`: if some error occurs
+
+
+
+- **PUT** `api/phase/`: insert a phase or update it in db, depending on attributes passed; if phase is 3, then it updates proposal according to given budget amount and score ranking 
+
+  - constraint: logged admin
+  - body content:
+  ```mjs
+  {
+    phase: 'Phase number', // number
+    budget: 'Phase budget' // number
+  }
+  ```
+  - response body:
+    ```mjs
+    {
+      true;
+    }
+    ```
+  - response status code:
+    - `200 OK`: all good
+    - `401 Unauthorized`: user not admin
+    - `500 Error`: if some error occurs
+
+
+- **DELETE** `api/phase/`: reset db, including votes, proposal and phase tables
+
+  - constraint: logged admin
+  - body content: _None_
+  - response body:
+    ```mjs
+    {
+      true;
+    }
+    ```
+  - response status code:
+    - `200 OK`: all good
+    - `401 Unauthorized`: user not admin
+    - `500 Error`: if some error occurs
+
+
 
 ## Database Tables
 
@@ -62,7 +396,7 @@
 - Table `proposals` - contains all proposals made by logged users
 
   - `id`: Integer - PRIMARY KEY
-  - `author`: Text, Proposal author - FOREIGN KEY(users)
+  - `author`: Text, Proposal author - FOREIGN KEY (users)
   - `description`: Text - Proposal one line description (max 90 char)
   - `cost`: Integer, Proposal cost
   - `score`: Integer, Proposal final score, computed only at final phase
@@ -71,8 +405,8 @@
 - Table `votes` - contains all votes, divided by user and proposal
 
   - `id`: Integer - PRIMARY KEY
-  - `proposal_id`: Integer, voted Prosal - FOREIGN KEY(proposals)
-  - `voter`: Text, person who voted - FOREIGN KEY(users)
+  - `proposal_id`: Integer, voted Prosal - FOREIGN KEY (proposals)
+  - `voter`: Text, person who voted - FOREIGN KEY (users)
   - `score`: Integer, given vote in [0, 3]
 
 - Table `state` - it will always cotain a single row, that is the current state of the full process
@@ -89,9 +423,9 @@
 
 ## Users Credentials
 
-| username | password | role  |
-| :------- | :------- | :---: |
+| username | password |  role |
+| :------- | :------- | ----: |
 | admin    | admin    | admin |
-| user1    | user1    | user  |
-| user2    | user2    | user  |
-| user3    | user3    | user  |
+| user1    | user1    |  user |
+| user2    | user2    |  user |
+| user3    | user3    |  user |
