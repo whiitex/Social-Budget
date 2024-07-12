@@ -265,12 +265,12 @@
   - constraint: logged user
   - body content:
 
-  ```mjs
-  {
-    proposal: 'Proposal id',
-    rating: 'Proposal score' // number in [0, 3]
-  }
-  ```
+    ```mjs
+    {
+      proposal: 'Proposal id',
+      rating: 'Proposal score' // number in [0, 3]
+    }
+    ```
 
   - response body:
     ```mjs
@@ -300,11 +300,11 @@
 
   - constraint: logged user
   - body content:
-  ```mjs
-  {
-    proposal: 'Proposal id',
-  }
-  ```
+    ```mjs
+    {
+      proposal: 'Proposal id',
+    }
+    ```
   - response body:
     ```mjs
     {
@@ -346,12 +346,12 @@
 
   - constraint: logged admin
   - body content:
-  ```mjs
-  {
-    phase: 'Phase number', // number
-    budget: 'Phase budget' // number
-  }
-  ```
+    ```mjs
+    {
+      phase: 'Phase number', // number
+      budget: 'Phase budget' // number
+    }
+    ```
   - response body:
     ```mjs
     {
@@ -419,7 +419,7 @@
 
 ### Phase 0
 ![phase0_notlogged](./img/screenshots/phase0_notlogged.png)
-*Phase 0 - unauthenticated and logged users POV*
+*Phase 0 - unauthenticated and logged users POV (logged users have theis username displayed)*
 
 ![phase0_admin](./img/screenshots/phase0_admin.png)
 *Phase 0 - admin POV*
@@ -428,29 +428,25 @@
 ![phase1_notlogged](./img/screenshots/phase1_notlogged.png)
 *Phase 1 - unauthenticated users POV*
 
-![phase1_user](./img/screenshots/phase1_admin.png)
+![phase1_user](./img/screenshots/phase1_user.png)
 *Phase 1 - logged users POV*
 
 ![phase1_admin](./img/screenshots/phase1_admin.png)
-*Phase 1 - admin POV*
+*Phase 1 - admin POV (admin can insert proposals too)*
 
 ### Phase 2
 ![phase2_notlogged](./img/screenshots/phase2_notlogged.png)
 *Phase 2 - unauthenticated users POV*
 
 ![phase2_user](./img/screenshots/phase2_user.png)
-*Phase 2 - logged users and admin POV (users do not have "next phase" button)*
+*Phase 2 - logged users and admin POV (logged users do not have the "next phase" button)*
 
 ### Phase 3
 ![phase3_notlogged](./img/screenshots/phase3_notlogged.png)
 *Phase 3 - unauthenticated users POV*
 
-![phase3_nuser](./img/screenshots/phase3_user.png)
-*Phase 3 - logged users POV*
-
 ![phase3_admin](./img/screenshots/phase3_admin.png)
-*Phase 3 - admin POV*
-
+*Phase 3 - logged users and admin POV (logged users do not have the "reset" button)*
 ## Users Credentials
 
 | username | password |  role |

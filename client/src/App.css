@@ -58,9 +58,9 @@ body {
 
 .verified-icon {
   position: absolute;
-  top: 0em; /* Adjust as needed */
-  right: 0em; /* Adjust as needed */
-  font-size: 24px; /* Adjust size as needed */
+  top: 0em;
+  right: 0em;
+  font-size: 24px;
   color: #888;
 }
 
