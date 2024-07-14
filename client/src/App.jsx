@@ -155,7 +155,7 @@ function App() {
           proposals.length === 0 ? (
             <h3 className="text-center mt-5">No approved proposals...</h3>
           ) : (
-            <Phase3 proposals={proposals} budget={budget} user={user} />
+            <Phase3 proposals={proposals} user={user} />
           )
         ) : (
           // Loading...

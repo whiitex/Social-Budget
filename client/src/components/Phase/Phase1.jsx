@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Container, Form, Button } from "react-bootstrap";
 import Proposal1 from "../Proposal/Proposal1";
 import DigitalButtons from "../Utility/DigitalButtons";

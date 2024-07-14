@@ -1,7 +1,7 @@
 import React from "react";
 import Proposal3 from "../Proposal/Proposal3";
 
-const Phase3 = ({ proposals, budget, user }) => {
+const Phase3 = ({ proposals, user }) => {
   // handle proposals and ranking
   return (
     <>
